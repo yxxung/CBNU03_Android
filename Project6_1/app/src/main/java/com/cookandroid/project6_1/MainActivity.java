@@ -24,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     TimePicker tPicker;
     TextView tvYear, tvMonth, tvDay, tvHour, tvMinute;
     int selectYear, selectMonth, selectDay;
+    int insertTest;
+    int insertTest2;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
