@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     TextView tvYear, tvMonth, tvDay, tvHour, tvMinute;
     int selectYear, selectMonth, selectDay;
     int insertTest;
+    int insertTest2;
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
