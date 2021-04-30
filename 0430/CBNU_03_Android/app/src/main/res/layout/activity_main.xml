@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#456789">
+
+    <!-- Activity Layout XML -->
+    <!-- @author croute -->
+    <!-- @since 2011.03.08 -->
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:text="April"
+        android:textSize="20sp"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:textColor="#000"
+        android:textStyle="bold"/>
+
+    <GridView
+        android:layout_marginTop="10dp"
+        android:id="@+id/gridview"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:numColumns="7"
+        >
+    </GridView>
+
+</LinearLayout>
