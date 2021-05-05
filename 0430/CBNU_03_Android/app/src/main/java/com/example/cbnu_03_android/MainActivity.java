@@ -3,6 +3,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import java.text.SimpleDateFormat;
@@ -12,21 +13,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -61,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
 
         tvDate = (TextView)findViewById(R.id.tv_date);
         gridView = (GridView)findViewById(R.id.gridview);
+
+        //api 연동 엑티비티로 가기위한 버튼
+        Button btnApi = (Button) findViewById(R.id.api_share);
 
         // 오늘에 날짜를 세팅 해준다.
         long now = System.currentTimeMillis();
@@ -137,6 +137,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         //0502 이명국_수정 끝
+
+        /**
+         * @author 최제현
+         * @date 2021/05/05
+         *
+         * 버튼 클릭시, api연동 엑티비티로 이동
+         */
+
+        btnApi.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getApplicationContext(),
+                        CalendarAPIActivity.class);
+
+                startActivity(intent);
+
+
+            }
+        });
     }
 
     /**
