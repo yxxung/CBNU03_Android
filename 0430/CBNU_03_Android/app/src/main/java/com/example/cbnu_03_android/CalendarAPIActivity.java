@@ -399,6 +399,8 @@ public class CalendarAPIActivity extends Activity {
 
         // Iterate through entries in calendar list
         String pageToken = null;
+
+//        Activity myActivity
         do {
             CalendarList calendarList = null;
             try {

@@ -153,6 +153,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(),
                         CalendarAPIActivity.class);
 
+                finish();
                 startActivity(intent);
 
 
