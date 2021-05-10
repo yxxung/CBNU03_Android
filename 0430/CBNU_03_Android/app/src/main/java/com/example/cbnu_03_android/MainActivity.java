@@ -140,46 +140,16 @@ public class MainActivity extends AppCompatActivity {
         gridAdapter = new GridAdapter(getApplicationContext(), dayList);
         gridView.setAdapter(gridAdapter);
 
-        // 0502 이명국_수정 Gridview 클릭시
+        //0508 이명국 수정 _ 기존 alertDialog-> Gridview 클릭시 ViewSchedule activity(popup)로 이동
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                // 날짜 클릭시 리스트 확인을 위한 AlertDialog 띄우기
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("");
-                builder.setMessage("오늘의 일정 입니다.");
-                final EditText editText = new EditText(MainActivity.this);
-                // 일정이 표시될 textView, 추후 listView로 변경 예정
-                final TextView textView = new TextView(MainActivity.this);
-                // 리스트 받아올 함수 작성 예정.
-
-                // 추가 버튼 클릭시 새 AlertDialog를 통한 edittext
-                builder.setPositiveButton("추가", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(MainActivity.this);
-                        builder2.setTitle("일정을 입력하세요");
-                        builder2.setView(editText);
-
-                        // 일정 입력 후 builder의 list에 추가 기능 미구현
-                        builder2.setPositiveButton("일정 추가", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(), editText.getText() , Toast.LENGTH_LONG).show();
-                                // eidtText 값을 리스트에 추가(builder에 띄우기 위함)
-                            }
-                        });
-                        builder2.setNegativeButton("취소",null);
-                        builder2.create().show();
-
-                    }
-                });
-                builder.setNegativeButton("취소",null);
-                builder.create().show();
+                Intent intent = new Intent(MainActivity.this, ViewSchedule.class);
+                startActivityForResult(intent, 1);
             }
         });
-        //0502 이명국_수정 끝
+        //0508 이명국_수정 끝
 
 
     }
