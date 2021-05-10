@@ -1,14 +1,7 @@
 package com.example.cbnu_03_android;
 import androidx.appcompat.app.AppCompatActivity;
 
-<<<<<<< HEAD
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-=======
-import android.content.Intent;
 import android.graphics.Color;
->>>>>>> 8add7a7a51c4615d6f841afc7d67e11488aebf9f
 import android.os.Bundle;
 
 import java.text.SimpleDateFormat;
@@ -24,17 +17,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-<<<<<<< HEAD
-import android.widget.EditText;
-=======
->>>>>>> 8add7a7a51c4615d6f841afc7d67e11488aebf9f
 import android.widget.GridView;
 import android.widget.TextView;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 8add7a7a51c4615d6f841afc7d67e11488aebf9f
 public class MainActivity extends AppCompatActivity {
 
     public int MONTH_COUNT = 0;
@@ -43,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> dayList;
     private GridView gridView;
     private Calendar mCal;
-    private Button left_press, right_press, goMemo;
+    private Button left_press, right_press;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,16 +39,8 @@ public class MainActivity extends AppCompatActivity {
         tvDate = (TextView)findViewById(R.id.tv_date);
         gridView = (GridView)findViewById(R.id.gridview);
 
-<<<<<<< HEAD
-        //api 연동 엑티비티로 가기위한 버튼
-        Button btnApi = (Button) findViewById(R.id.api_share);
-
-        // 오늘에 날짜를 세팅 해준다.
-=======
         left_press = (Button)findViewById(R.id.left_press);
         right_press = (Button)findViewById(R.id.right_press);
-
-        goMemo = (Button)findViewById(R.id.goMemo);
 
 
         left_press.setOnClickListener(new Button.OnClickListener() {
@@ -81,22 +59,12 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        goMemo.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view){
-                Intent intent = new Intent(getApplicationContext(), MemoActivity.class);
-                startActivity(intent);
-            }
-        });
-
         new_month(MONTH_COUNT);
     }
 
     private void new_month(int cnt)
     {
 
->>>>>>> 8add7a7a51c4615d6f841afc7d67e11488aebf9f
         long now = System.currentTimeMillis();
         final Date date = new Date(now);
 
@@ -130,72 +98,6 @@ public class MainActivity extends AppCompatActivity {
 
         gridAdapter = new GridAdapter(getApplicationContext(), dayList);
         gridView.setAdapter(gridAdapter);
-<<<<<<< HEAD
-
-        // 0502 이명국_수정 Gridview 클릭시
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                // 날짜 클릭시 리스트 확인을 위한 AlertDialog 띄우기
-                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("");
-                builder.setMessage("오늘의 일정 입니다.");
-                final EditText editText = new EditText(MainActivity.this);
-                // 일정이 표시될 textView, 추후 listView로 변경 예정
-                final TextView textView = new TextView(MainActivity.this);
-                // 리스트 받아올 함수 작성 예정.
-
-                // 추가 버튼 클릭시 새 AlertDialog를 통한 edittext
-                builder.setPositiveButton("추가", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(MainActivity.this);
-                        builder2.setTitle("일정을 입력하세요");
-                        builder2.setView(editText);
-
-                        // 일정 입력 후 builder의 list에 추가 기능 미구현
-                        builder2.setPositiveButton("일정 추가", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(), editText.getText() , Toast.LENGTH_LONG).show();
-                                // eidtText 값을 리스트에 추가(builder에 띄우기 위함)
-                            }
-                        });
-                        builder2.setNegativeButton("취소",null);
-                        builder2.create().show();
-
-                    }
-                });
-                builder.setNegativeButton("취소",null);
-                builder.create().show();
-            }
-        });
-        //0502 이명국_수정 끝
-
-        /**
-         * @author 최제현
-         * @date 2021/05/05
-         *
-         * 버튼 클릭시, api연동 엑티비티로 이동
-         */
-
-        btnApi.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getApplicationContext(),
-                        CalendarAPIActivity.class);
-
-                finish();
-                startActivity(intent);
-
-
-            }
-        });
-=======
->>>>>>> 8add7a7a51c4615d6f841afc7d67e11488aebf9f
     }
 
     private void setCalendarDate(int month) {
