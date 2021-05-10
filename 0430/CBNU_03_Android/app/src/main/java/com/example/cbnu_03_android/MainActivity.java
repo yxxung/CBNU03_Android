@@ -1,14 +1,10 @@
 package com.example.cbnu_03_android;
 import androidx.appcompat.app.AppCompatActivity;
 
-<<<<<<< HEAD
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-=======
-import android.content.Intent;
 import android.graphics.Color;
->>>>>>> 8add7a7a51c4615d6f841afc7d67e11488aebf9f
 import android.os.Bundle;
 
 import java.text.SimpleDateFormat;
@@ -22,19 +18,14 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-<<<<<<< HEAD
 import android.widget.EditText;
-=======
->>>>>>> 8add7a7a51c4615d6f841afc7d67e11488aebf9f
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 8add7a7a51c4615d6f841afc7d67e11488aebf9f
 public class MainActivity extends AppCompatActivity {
 
     public int MONTH_COUNT = 0;
@@ -44,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private GridView gridView;
     private Calendar mCal;
     private Button left_press, right_press, goMemo;
+    private Button btnApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,12 +45,10 @@ public class MainActivity extends AppCompatActivity {
         tvDate = (TextView)findViewById(R.id.tv_date);
         gridView = (GridView)findViewById(R.id.gridview);
 
-<<<<<<< HEAD
         //api 연동 엑티비티로 가기위한 버튼
         Button btnApi = (Button) findViewById(R.id.api_share);
 
         // 오늘에 날짜를 세팅 해준다.
-=======
         left_press = (Button)findViewById(R.id.left_press);
         right_press = (Button)findViewById(R.id.right_press);
 
@@ -91,12 +81,31 @@ public class MainActivity extends AppCompatActivity {
         });
 
         new_month(MONTH_COUNT);
+        /**
+         * @author 최제현
+         * @date 2021/05/05
+         *
+         * 버튼 클릭시, api연동 엑티비티로 이동
+         */
+
+        btnApi.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getApplicationContext(),
+                        CalendarAPIActivity.class);
+
+                startActivity(intent);
+
+
+            }
+        });
     }
 
     private void new_month(int cnt)
     {
 
->>>>>>> 8add7a7a51c4615d6f841afc7d67e11488aebf9f
         long now = System.currentTimeMillis();
         final Date date = new Date(now);
 
@@ -130,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
 
         gridAdapter = new GridAdapter(getApplicationContext(), dayList);
         gridView.setAdapter(gridAdapter);
-<<<<<<< HEAD
 
         // 0502 이명국_수정 Gridview 클릭시
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -173,29 +181,7 @@ public class MainActivity extends AppCompatActivity {
         });
         //0502 이명국_수정 끝
 
-        /**
-         * @author 최제현
-         * @date 2021/05/05
-         *
-         * 버튼 클릭시, api연동 엑티비티로 이동
-         */
 
-        btnApi.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getApplicationContext(),
-                        CalendarAPIActivity.class);
-
-                finish();
-                startActivity(intent);
-
-
-            }
-        });
-=======
->>>>>>> 8add7a7a51c4615d6f841afc7d67e11488aebf9f
     }
 
     private void setCalendarDate(int month) {
