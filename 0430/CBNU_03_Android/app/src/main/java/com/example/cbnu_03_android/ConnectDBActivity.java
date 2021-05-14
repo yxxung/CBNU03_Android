@@ -13,14 +13,11 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+
 
 public class ConnectDBActivity extends Activity {
 
-    //db 인스턴스 생성
-    FirebaseFirestore db = FirebaseFirestore.getInstance();
-    DocumentReference documentReference;
+
     Button dbTestBtn;
     Button dbAddBtn;
     EditText textMemo;
@@ -38,31 +35,21 @@ public class ConnectDBActivity extends Activity {
         dbAddBtn = findViewById(R.id.button_add_to_DB);
         textDate = findViewById(R.id.input_date);
         textMemo = findViewById(R.id.input_memo);
+        mainResult = findViewById(R.id.DB_main_result);
+        mainStatus = findViewById(R.id.DB_main_status);
 
 
         dbAddBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
-                documentReference = db.collection("calendar").document();
+
                 int isDone = 0;
                 String addMemo = textMemo.getText().toString();
                 String addDate = textDate.getText().toString();
 
                 newMemo = new Memo(addMemo, addDate, isDone);
-                db.collection("calendar").add(newMemo)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        mainResult.setText("successfully updated!");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        e.printStackTrace();
-                    }
-                });
+
 
             }
         });

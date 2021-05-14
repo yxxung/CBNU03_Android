@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private GridView gridView;
     private Calendar mCal;
     private Button left_press, right_press, goMemo;
-    private Button btnApi;
+    private Button btnApi, btnDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
         gridView = (GridView)findViewById(R.id.gridview);
 
         //api 연동 엑티비티로 가기위한 버튼
-        Button btnApi = (Button) findViewById(R.id.api_share);
+        btnApi = (Button) findViewById(R.id.api_share);
+        btnDB = (Button) findViewById(R.id.api_db);
 
         // 오늘에 날짜를 세팅 해준다.
         left_press = (Button)findViewById(R.id.left_press);
@@ -97,7 +98,26 @@ public class MainActivity extends AppCompatActivity {
                         CalendarAPIActivity.class);
 
                 startActivity(intent);
+                finish();
 
+
+            }
+        });
+
+        btnDB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(getApplicationContext(),
+                        ConnectDBActivity.class);
+
+
+//                try{
+                    startActivity(intent);
+//                }catch (Exception e){
+//                    e.printStackTrace();
+//                }
+                finish();
 
             }
         });
