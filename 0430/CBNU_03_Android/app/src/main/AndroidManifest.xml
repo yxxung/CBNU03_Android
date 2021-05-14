@@ -32,6 +32,11 @@
             android:name=".CalendarAPIActivity"
             android:label="CalenderAPIActivity"
             ></activity>
+        <activity
+            android:name=".ConnectDBActivity"
+            android:label="Google FireBase API"
+            ></activity>
+
         <activity android:name=".ViewSchedule"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog"></activity>
 
