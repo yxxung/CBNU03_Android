@@ -140,16 +140,20 @@ public class MainActivity extends AppCompatActivity {
         gridAdapter = new GridAdapter(getApplicationContext(), dayList);
         gridView.setAdapter(gridAdapter);
 
-        //0508 이명국 수정 _ 기존 alertDialog-> Gridview 클릭시 ViewSchedule activity(popup)로 이동
+        //0516 이명국 수정 _ 기존 alertDialog-> Gridview 클릭시 ViewSchedule activity(popup)로 이동 -> grid별 position 추출
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                 Intent intent = new Intent(MainActivity.this, ViewSchedule.class);
                 startActivityForResult(intent, 1);
+                Toast.makeText(MainActivity.this ,dayList.get(position).toString(),Toast.LENGTH_SHORT).show();
+                intent.putExtra("position", dayList.get(position));
+                intent.putExtra("position2",mCal.get(Calendar.MONTH));
+                startActivity(intent);
             }
         });
-        //0508 이명국_수정 끝
+        //0516 이명국_수정 끝
 
 
     }
