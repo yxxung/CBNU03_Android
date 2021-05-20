@@ -16,7 +16,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="40"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginLeft="10dp"
@@ -30,7 +29,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="80"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginLeft="10dp"
@@ -39,41 +37,52 @@
         android:layout_marginTop="10dp"
         android:text=""/>
 
+    <DatePicker
+        android:id="@+id/input_date"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:datePickerMode="spinner"
+        android:calendarViewShown="false"/>
+
     <EditText
         android:id="@+id/input_memo"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="메모입력"
+        android:text="주일정"
         />
 
     <EditText
-        android:id="@+id/input_date"
+        android:id="@+id/input_submemo"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_centerHorizontal="true"
         android:layout_marginBottom="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
-        android:text="일정입력"
+        android:text="서브일정"
         />
+
+
 
 
     <Button
         android:id="@+id/button_DB_Test"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:text="DB Test" />
 
 
@@ -81,8 +90,6 @@
         android:id="@+id/button_add_to_DB"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
         android:text="Add" />
 
 
