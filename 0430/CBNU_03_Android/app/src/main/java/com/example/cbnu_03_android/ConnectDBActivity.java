@@ -1,6 +1,7 @@
 package com.example.cbnu_03_android;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +22,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class ConnectDBActivity extends Activity {
@@ -36,6 +42,7 @@ public class ConnectDBActivity extends Activity {
     TextView mainStatus;
     TextView mainResult;
     ArrayList<Memo> resultArray;
+    Long LongDatetime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +74,15 @@ public class ConnectDBActivity extends Activity {
                         datePicker.getYear(),
                         datePicker.getMonth()+1,
                         datePicker.getDayOfMonth());
-                newMemo = new Memo(addDate ,addMemo, addSubMemo, isDone);
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                try {
+                    Date addDatetime = dateFormat.parse(addDate);
+                    newMemo = new Memo(addDatetime.getTime() ,addMemo, addSubMemo, isDone);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
 
 
                 //키 자동생성, 및 삽입
@@ -96,21 +111,57 @@ public class ConnectDBActivity extends Activity {
         dbTestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String id = "1";
 
-                db.child(id).orderByChild("date").addValueEventListener(new ValueEventListener() {
+                String id = "1";
+//
+//                db.child(id).orderByChild("date").addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+//                            if (snapshot.getValue() != null) {
+//                                int i = 0;
+//                                //snapshot의 정보, memo 객체로 변환
+//                                Memo memo = postSnapshot.getValue(Memo.class);
+//                                resultArray.add(i, memo);
+//                                resultArray.get(i).setToken();
+//                                i++;
+//                            } else {
+//                                Toast.makeText(ConnectDBActivity.this, "no data", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError error) {
+//                        Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
+//                    }
+//                });
+
+                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                try {
+                    String date = "2021/05/19";
+                    LongDatetime = dateFormat.parse(date).getTime();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                resultArray.clear();
+
+                db.child(id).orderByChild("date").equalTo(LongDatetime).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for(DataSnapshot postSnapshot : snapshot.getChildren()){
+                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                             if (snapshot.getValue() != null) {
+                                int i = 0;
                                 //snapshot의 정보, memo 객체로 변환
                                 Memo memo = postSnapshot.getValue(Memo.class);
-                                resultArray.add(memo);
+                                resultArray.add(1, memo);
+                                resultArray.get(1).setToken();
+                                i++;
                             } else {
                                 Toast.makeText(ConnectDBActivity.this, "no data", Toast.LENGTH_SHORT).show();
                             }
                         }
-
                     }
 
                     @Override
@@ -118,8 +169,21 @@ public class ConnectDBActivity extends Activity {
                         Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
                     }
                 });
+//
+//                Intent outIntent = new Intent(getApplicationContext(), MainActivity.class);
+//                outIntent.putExtra("memoArray", resultArray);
+//                setResult(RESULT_OK, outIntent);
+//                finish();
+
+
+
+
             }
+
+
+
         });
+
 
 
 
