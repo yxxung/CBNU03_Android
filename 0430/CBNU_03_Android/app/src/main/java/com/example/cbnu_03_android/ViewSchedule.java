@@ -16,15 +16,29 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 public class ViewSchedule extends Activity {
 
+    private DatabaseReference db;
     ScheduleAdapter adapter;
     EditText editText;
     EditText editText2;
     TextView monthdate;
+    String defaultId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +49,19 @@ public class ViewSchedule extends Activity {
         Intent secondIntent = getIntent();
         String position = secondIntent.getStringExtra("position");
         int position2 = secondIntent.getIntExtra("position2", 0);
+
+        /**
+         * @Author 최제현
+         * DB레퍼런스 추가
+         */
+        try{
+            db = FirebaseDatabase.getInstance().getReference();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        /**
+         *
+         */
 
         // Popup activity의 Title을 제거
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -79,17 +106,80 @@ public class ViewSchedule extends Activity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int month = position2;
+                String year = "2021";
+                int month = position2+1;
                 String date = position;
+                //db에 저장하기 위한 id기본값 나중에 확장을 위해 추가.
+                defaultId = "1";
                 //schedule = 일정, schedule = 상세 일정
                 String schedule = editText.getText().toString();
                 String schedule2 = editText2.getText().toString();
 
+
                 if(editText.getText().toString().equals("")){
                     Toast.makeText(getApplicationContext(),"일정을 입력해주세요",Toast.LENGTH_SHORT).show();
                 }else {
-                    adapter.addItem(new ScheduleItem(month, date, schedule, schedule2));
-                    adapter.notifyDataSetChanged();
+
+
+
+
+                    /**
+                     * @author 최제현
+                     *
+                     * 입력한 문자열 Parse후 저장
+                     */
+
+                    String makeStringDate = String.format("%s/%d/%s",
+                                    year, month, date);
+                    DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                    try {
+                        Date addDatetime = dateFormat.parse(makeStringDate);
+
+                        //addDateTime.getTime long으로 Datetime 변경
+                        ScheduleItem scheduleItem= new ScheduleItem(addDatetime.getTime(), makeStringDate, schedule, schedule2);
+                         adapter.addItem(scheduleItem);
+                         adapter.notifyDataSetChanged();
+
+                        /**
+                         * @author 일정 생성시 자동으로 데이터 베이스 저장
+                         */
+                        //키 자동생성, 및 삽입
+                        String key = db.child(defaultId).push().getKey();
+                        //해당 키 위치에 데이터 삽입
+                        db.child(defaultId).child(key).setValue(scheduleItem)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        // Write was successful!
+                                        Toast.makeText(ViewSchedule.this, "저장을 완료했습니다.", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        // Write failed
+                                        Toast.makeText(ViewSchedule.this, "저장을 실패했습니다.", Toast.LENGTH_SHORT).show();
+                                        e.printStackTrace();
+                                    }
+                                });
+                        /**
+                         *
+                         */
+
+
+
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+
+                    /**
+                     *
+                     */
+
+
+
                 }
 
 

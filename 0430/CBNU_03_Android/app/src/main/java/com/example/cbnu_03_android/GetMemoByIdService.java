@@ -25,8 +25,7 @@ import java.util.ArrayList;
 public class GetMemoByIdService extends Service {
 
     private DatabaseReference db;
-    ArrayList<Memo> resultArray;
-    Memo memo;
+    ArrayList<ScheduleItem> resultArray;
     Long longDateTime;
 
     public GetMemoByIdService() {
@@ -57,9 +56,9 @@ public class GetMemoByIdService extends Service {
                         if (snapshot.getValue() != null) {
                             int i = 0;
                             //snapshot의 정보, memo 객체로 변환
-                            Memo memo = postSnapshot.getValue(Memo.class);
-                            resultArray.add(i, memo);
-                            resultArray.get(i).setToken();
+                            ScheduleItem scheduleItem = postSnapshot.getValue(ScheduleItem.class);
+                            resultArray.add(i, scheduleItem);
+//                            resultArray.get(i).setToken();
                             i++;
                         } else {
                             Log.w("FireBaseData", "loadPost:onCancelled");
@@ -75,7 +74,7 @@ public class GetMemoByIdService extends Service {
                      **/
                     returnIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
-                    returnIntent.putExtra("memoList", resultArray);
+                    returnIntent.putExtra("ScheduleList", resultArray);
                     // *** 이제 완성된 인텐트와 startActivity()메소드를 사용하여 MainActivity 액티비티를 호출한다. ***
                     startActivity(returnIntent);
                     stopSelf();

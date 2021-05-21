@@ -3,18 +3,36 @@ package com.example.cbnu_03_android;
 import android.content.Intent;
 
 public class ScheduleItem {
+    Long longDate;
+    String stringDate;
     String schedule;
     String schedule2;
+
+
+
+
+
+   // 객체를 좀더 편하게 이용하기 위해 선언된 멤버변수
+
     int month;
     String date;
+    String parsedDate[];
+    String year;
+    String dayOfMonth;
+
+
+    public ScheduleItem(){
+        // Default constructor required for calls to DataSnapshot.getValue(FirebasePost.class)
+    }
 
     // Generate > Constructor
-    public ScheduleItem(int month, String date, String schedule, String schedule2) {
-        this.date = date;
-        this.month = month;
+    public ScheduleItem(Long date, String stringDate, String schedule, String schedule2) {
+        this.longDate = date;
+        this.stringDate =stringDate;
         this.schedule = schedule;
         this.schedule2 = schedule2;
     }
+
 
     public int getMonth() {
         return month;
@@ -50,15 +68,44 @@ public class ScheduleItem {
         this.schedule2 = schedule2;
     }
 
-    // Generate > toString() : 아이템을 문자열로 출력
-
-    @Override
-    public String toString() {
-        return "SingerItem{" +
-                "month='"+ month + '\''+
-                ", date='"+ date + '\''+
-                ", schedule='" + schedule + '\'' +
-                ", schedule2='" + schedule2 + '\'' +
-                '}';
+    public String getStringDate() {
+        return stringDate;
     }
+
+    public void setStringDate(String stringDate) {
+        this.stringDate = stringDate;
+    }
+
+    public Long getLongDate() {
+        return longDate;
+    }
+
+    public void setLongDate(Long longDate) {
+        this.longDate = longDate;
+    }
+
+    public String[] getParsedDate() {
+        return parsedDate;
+    }
+
+    public void setParsedDate(String[] parsedDate) {
+        this.parsedDate = parsedDate;
+    }
+
+    public String getYear() {
+        return year;
+    }
+
+    public void setYear(String year) {
+        this.year = year;
+    }
+
+    public String getDayOfMonth() {
+        return dayOfMonth;
+    }
+
+    public void setDayOfMonth(String dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
+
 }
