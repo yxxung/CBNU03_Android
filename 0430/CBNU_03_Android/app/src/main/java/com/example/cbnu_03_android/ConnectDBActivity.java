@@ -41,15 +41,21 @@ public class ConnectDBActivity extends Activity {
     Memo newMemo;
     TextView mainStatus;
     TextView mainResult;
-    ArrayList<Memo> resultArray;
+    ArrayList<ScheduleItem> resultArray;
     Long LongDatetime;
+    Intent getIntent;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_db);
-        resultArray = new ArrayList<Memo>();
+        resultArray = new ArrayList<ScheduleItem>();
+
+        getIntent = getIntent();
+
+
         try{
             db = FirebaseDatabase.getInstance().getReference();
         }catch (Exception e){
@@ -116,7 +122,7 @@ public class ConnectDBActivity extends Activity {
             @Override
             public void onClick(View view) {
 
-                String id = "1";
+//                String id = "1";
 
                 // DB 에서 해당 id가 가진 일정을 date별로 정렬하여
 //
@@ -178,17 +184,34 @@ public class ConnectDBActivity extends Activity {
 ////
 ////
 
+                Intent intent = new Intent(getApplicationContext(), GetMemoByIdService.class);
+                intent.putExtra("id", "1");
 
-
-
+                startService(intent);
             }
-
-
 
         });
 
+        Intent getIntent = getIntent();
+
+        processCommand(getIntent);
 
 
+        System.out.println("test");
 
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        processCommand(getIntent);
+
+        super.onNewIntent(intent);
+    }
+
+    public void processCommand(Intent intent){
+        if(intent != null){
+            resultArray = (ArrayList<ScheduleItem>) intent.getSerializableExtra("ScheduleList");
+        }
+    }
+
 }

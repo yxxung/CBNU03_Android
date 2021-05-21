@@ -2,21 +2,23 @@ package com.example.cbnu_03_android;
 
 import android.content.Intent;
 
-public class ScheduleItem {
+import java.io.Serializable;
+
+public class ScheduleItem implements Serializable {
+
+    //실질적으로 DB에 저장되는 부분
     Long longDate;
     String stringDate;
     String schedule;
     String schedule2;
-
-
-
+    int month;
 
 
    // 객체를 좀더 편하게 이용하기 위해 선언된 멤버변수
 
 
 
-    int month;
+
     String date;
     String parsedDate[];
     String year;
