@@ -50,7 +50,11 @@ public class ConnectDBActivity extends Activity {
 
         setContentView(R.layout.activity_db);
         resultArray = new ArrayList<Memo>();
-        db = FirebaseDatabase.getInstance().getReference();
+        try{
+            db = FirebaseDatabase.getInstance().getReference();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         dbTestBtn = findViewById(R.id.button_DB_Test);
         dbAddBtn = findViewById(R.id.button_add_to_DB);
         datePicker = findViewById(R.id.input_date);
@@ -113,8 +117,43 @@ public class ConnectDBActivity extends Activity {
             public void onClick(View view) {
 
                 String id = "1";
+
+                // DB 에서 해당 id가 가진 일정을 date별로 정렬하여
 //
 //                db.child(id).orderByChild("date").addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+//                            if (snapshot.getValue() != null) {
+//                                int i = 0;
+//                                //snapshot의 정보, memo 객체로 변환
+//                                Memo memo = postSnapshot.getValue(Memo.class);
+//                                resultArray.add(i, memo);
+//                                resultArray.get(i).setToken();
+//                                i++;
+////                            } else {
+////                                Toast.makeText(ConnectDBActivity.this, "no data", Toast.LENGTH_SHORT).show();
+////                            }
+////                        }
+////                    }
+////
+////                    @Override
+////                    public void onCancelled(@NonNull DatabaseError error) {
+////                        Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
+////                    }
+////                });
+//
+//                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+//                try {
+//                    String date = "2021/05/19";
+//                    LongDatetime = dateFormat.parse(date).getTime();
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                resultArray.clear();
+//
+//                db.child(id).orderByChild("date").equalTo(LongDatetime).addValueEventListener(new ValueEventListener() {
 //                    @Override
 //                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
@@ -136,44 +175,8 @@ public class ConnectDBActivity extends Activity {
 //                        Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
 //                    }
 //                });
-
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-                try {
-                    String date = "2021/05/19";
-                    LongDatetime = dateFormat.parse(date).getTime();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                resultArray.clear();
-
-                db.child(id).orderByChild("date").equalTo(LongDatetime).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                            if (snapshot.getValue() != null) {
-                                int i = 0;
-                                //snapshot의 정보, memo 객체로 변환
-                                Memo memo = postSnapshot.getValue(Memo.class);
-                                resultArray.add(1, memo);
-                                resultArray.get(1).setToken();
-                                i++;
-                            } else {
-                                Toast.makeText(ConnectDBActivity.this, "no data", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
-                    }
-                });
-//
-//                Intent outIntent = new Intent(getApplicationContext(), MainActivity.class);
-//                outIntent.putExtra("memoArray", resultArray);
-//                setResult(RESULT_OK, outIntent);
-//                finish();
+////
+////
 
 
 
