@@ -14,6 +14,8 @@ public class ScheduleItem {
 
    // 객체를 좀더 편하게 이용하기 위해 선언된 멤버변수
 
+
+
     int month;
     String date;
     String parsedDate[];
@@ -106,6 +108,10 @@ public class ScheduleItem {
 
     public void setDayOfMonth(String dayOfMonth) {
         this.dayOfMonth = dayOfMonth;
+    }
+
+    public void setMonth(int month) {
+        this.month = month;
     }
 
 }

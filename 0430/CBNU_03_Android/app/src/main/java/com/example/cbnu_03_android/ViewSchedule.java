@@ -137,6 +137,7 @@ public class ViewSchedule extends Activity {
 
                         //addDateTime.getTime long으로 Datetime 변경
                         ScheduleItem scheduleItem= new ScheduleItem(addDatetime.getTime(), makeStringDate, schedule, schedule2);
+                        scheduleItem.setMonth(month);
                          adapter.addItem(scheduleItem);
                          adapter.notifyDataSetChanged();
 
