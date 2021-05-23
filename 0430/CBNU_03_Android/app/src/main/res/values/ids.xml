@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="textview_main_status" type="id" />
+    <item name="textview_main_result" type="id" />
+    <item name="button_main_add_calendar" type="id" />
+    <item name="button_main_add_event" type="id" />
+    <item name="button_main_get_event" type="id" />
+</resources>
