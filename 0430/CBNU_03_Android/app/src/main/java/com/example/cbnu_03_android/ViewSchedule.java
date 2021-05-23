@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -38,6 +39,8 @@ public class ViewSchedule extends Activity {
     EditText editText2;
     TextView monthdate;
     String defaultId;
+    Button button;
+    Button button2;
 
 
     @Override
@@ -88,6 +91,8 @@ public class ViewSchedule extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ScheduleItem item = (ScheduleItem) adapter.getItem(position);
                 Toast.makeText(getApplicationContext(), "선택 :"+ position, Toast.LENGTH_SHORT).show();
+                adapter.items.clear();
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -102,7 +107,8 @@ public class ViewSchedule extends Activity {
             }
         });
         // 버튼 눌렀을 때 일정, 상세일정이 리스트뷰에 포함되도록 처리
-        Button button = (Button) findViewById(R.id.button);
+        button = (Button) findViewById(R.id.button);
+        button2 = (Button) findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +117,7 @@ public class ViewSchedule extends Activity {
                 String date = position;
                 //db에 저장하기 위한 id기본값 나중에 확장을 위해 추가.
                 defaultId = "1";
-                //schedule = 일정, schedule = 상세 일정
+                //schedule = 일정, schedule2 = 상세 일정
                 String schedule = editText.getText().toString();
                 String schedule2 = editText2.getText().toString();
 
@@ -186,6 +192,14 @@ public class ViewSchedule extends Activity {
 
             }
         });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Toast.makeText(getApplicationContext(),"종료",Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
     }
 
     class ScheduleAdapter extends BaseAdapter {
@@ -230,5 +244,20 @@ public class ViewSchedule extends Activity {
 
             return view;
         }
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        //바깥레이어 클릭시 안닫히게
+        if(event.getAction()==MotionEvent.ACTION_OUTSIDE){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        //안드로이드 백버튼 막기
+        return;
     }
 }

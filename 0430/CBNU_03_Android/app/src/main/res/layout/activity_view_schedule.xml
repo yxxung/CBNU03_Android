@@ -54,13 +54,27 @@
                 android:hint="상세일정"
                 android:layout_gravity="center"/>
 
-            <Button
-                android:id="@+id/button"
-                android:layout_width="80dp"
-                android:layout_height="50dp"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="일정 등록"
-                android:layout_gravity="center"/>
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="일정 등록" />
+
+                <Button
+                    android:id="@+id/button2"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="1"
+                    android:text="취소" />
+            </LinearLayout>
 
         </LinearLayout>
 
