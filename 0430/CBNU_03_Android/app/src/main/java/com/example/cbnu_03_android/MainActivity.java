@@ -165,11 +165,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                Intent intent = new Intent(MainActivity.this, ViewSchedule.class);
-                Toast.makeText(MainActivity.this ,dayList.get(position).toString(),Toast.LENGTH_SHORT).show();
-                intent.putExtra("position", dayList.get(position));
-                intent.putExtra("position2",mCal.get(Calendar.MONTH));
-                startActivityForResult(intent, 1);
+                    Intent intent = new Intent(MainActivity.this, ViewSchedule.class);
+                    //Toast.makeText(MainActivity.this, dayList.get(position).toString(), Toast.LENGTH_SHORT).show();
+                    intent.putExtra("position", dayList.get(position));
+                    intent.putExtra("position2", mCal.get(Calendar.MONTH));
+                    startActivityForResult(intent, 1);
+
             }
         });
         //0516 이명국_수정 끝

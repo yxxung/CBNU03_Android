@@ -3,27 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <LinearLayout
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_width="300dp"
+        android:layout_height="500dp"
         android:orientation="vertical">
+
 
         <TextView
             android:id="@+id/monthday"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center"
             android:text="월 일"
             android:textSize="50px"
-            android:gravity="center"/>
+            android:textColor="#CC99FF"
+            android:layout_marginTop="20dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="250dp"
+            android:orientation="vertical"
+            android:layout_marginTop="10dp">
 
             <ListView
                 android:id="@+id/listView"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/linearLayout"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
@@ -34,47 +38,48 @@
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center">
+            android:layout_height="192dp"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="일정 입력"
+                />
 
             <EditText
                 android:id="@+id/editText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:hint="일정"
-                android:layout_gravity="center"/>
+                android:backgroundTint = "#CC99FF"/>
 
             <EditText
                 android:id="@+id/editText2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
                 android:hint="상세일정"
-                android:layout_gravity="center"/>
+                android:backgroundTint = "#CC99FF"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <ImageView
+                android:id="@+id/button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/button"
-                    android:layout_width="80dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:text="일정 등록" />
-
-                <Button
-                    android:id="@+id/button2"
-                    android:layout_width="80dp"
-                    android:layout_height="50dp"
-                    android:layout_weight="1"
-                    android:text="취소" />
-            </LinearLayout>
+                android:text="일정 등록"
+                android:src="@drawable/addbutton"
+                android:layout_marginBottom="10dp"/>
 
         </LinearLayout>
 
