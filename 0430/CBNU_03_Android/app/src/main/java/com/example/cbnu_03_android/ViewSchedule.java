@@ -2,9 +2,12 @@ package com.example.cbnu_03_android;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -12,6 +15,8 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +43,8 @@ public class ViewSchedule extends Activity {
     EditText editText2;
     TextView monthdate;
     String defaultId;
+    ImageView button;
+    ImageButton imagebutton;
 
 
     @Override
@@ -74,7 +81,7 @@ public class ViewSchedule extends Activity {
         monthdate = (TextView) findViewById(R.id.monthday);
         ListView listView = (ListView) findViewById(R.id.listView);
 
-        monthdate.setText("<"+ (position2+1) + "월 " + position + "일 " + " 일정 "+">");
+        monthdate.setText( (position2+1) + "월 " + position + "일 " + " 일정" );
         // 어댑터 안에 데이터 담기
         adapter = new ScheduleAdapter();
 
@@ -88,6 +95,7 @@ public class ViewSchedule extends Activity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ScheduleItem item = (ScheduleItem) adapter.getItem(position);
                 Toast.makeText(getApplicationContext(), "선택 :"+ position, Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -97,12 +105,38 @@ public class ViewSchedule extends Activity {
                 Log.d("LONG CLICK", "OnLongClickListener");
                 //변경 내용 반영 함수
                 adapter.notifyDataSetChanged();
-                Toast.makeText(getApplicationContext(), "롱클릭", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(), "롱클릭", Toast.LENGTH_SHORT).show();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewSchedule.this);
+
+                builder.setTitle("선택한 일정을 삭제하겠습니까?");
+
+                builder.setPositiveButton("삭제", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        //adapter.items.clear();
+                        adapter.items.remove(i);
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+
+                alertDialog.show();
+
                 return true;
             }
         });
         // 버튼 눌렀을 때 일정, 상세일정이 리스트뷰에 포함되도록 처리
-        Button button = (Button) findViewById(R.id.button);
+        button = (ImageView) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +145,7 @@ public class ViewSchedule extends Activity {
                 String date = position;
                 //db에 저장하기 위한 id기본값 나중에 확장을 위해 추가.
                 defaultId = "1";
-                //schedule = 일정, schedule = 상세 일정
+                //schedule = 일정, schedule2 = 상세 일정
                 String schedule = editText.getText().toString();
                 String schedule2 = editText2.getText().toString();
 
@@ -134,13 +168,14 @@ public class ViewSchedule extends Activity {
                     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                     try {
                         Date addDatetime = dateFormat.parse(makeStringDate);
-
-                        //addDateTime.getTime long으로 Datetime 변경
-                        ScheduleItem scheduleItem= new ScheduleItem(addDatetime.getTime(), makeStringDate, schedule, schedule2);
-                        scheduleItem.setMonth(month);
-                        scheduleItem.setYear(year);
-                         adapter.addItem(scheduleItem);
-                         adapter.notifyDataSetChanged();
+                        
+                            //addDateTime.getTime long으로 Datetime 변경
+                            ScheduleItem scheduleItem = new ScheduleItem(addDatetime.getTime(), makeStringDate, schedule, schedule2);
+                            scheduleItem.setMonth(month);
+                            adapter.addItem(scheduleItem);
+                            adapter.notifyDataSetChanged();
+                            editText.setText(null);
+                            editText2.setText(null);
 
                         /**
                          * @author 일정 생성시 자동으로 데이터 베이스 저장
@@ -232,4 +267,14 @@ public class ViewSchedule extends Activity {
             return view;
         }
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        //바깥레이어 클릭시 안닫히게
+        if(event.getAction()==MotionEvent.ACTION_OUTSIDE){
+            return false;
+        }
+        return true;
+    }
+
 }

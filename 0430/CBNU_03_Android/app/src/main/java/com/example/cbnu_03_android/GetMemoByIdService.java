@@ -37,13 +37,14 @@ public class GetMemoByIdService extends Service {
         if (intent == null) {
             return Service.START_STICKY; //서비스가 종료되어도 자동으로 다시 실행시켜줘!
         } else {
+            resultArray = new ArrayList<ScheduleItem>();
             String id = intent.getStringExtra("id");
 
             //Log.d(TAG, "전달받은 데이터: " + command+ ", " +name);
 
             for (int i=0; i<5;++i) {
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(100);
                 } catch (Exception e) { };
 
                 Log.d("GetMemoByIdService", "Waiting " + i + " seconds.");
@@ -72,7 +73,19 @@ public class GetMemoByIdService extends Service {
                         }
                     }
 
+                    Intent returnIntent = new Intent(getApplicationContext(), ConnectDBActivity.class);
 
+                    /**
+                     화면이 띄워진 상황에서 다른 액티비티를 호출하는 것은 문제가없으나,
+                     지금은 따로 띄워진 화면이 없는 상태에서 백그라운드에서 실행중인 서비스가 액티비티를 호출하는 상황이다.
+                     이러한 경우에는 FLAG_ACTIVITY_NEW_TASK 옵션(플래그)을 사용해줘야 한다.
+                     **/
+                    returnIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                    returnIntent.putExtra("ScheduleList", resultArray);
+                    // *** 이제 완성된 인텐트와 startActivity()메소드를 사용하여 MainActivity 액티비티를 호출한다. ***
+                    startActivity(returnIntent);
+                    stopSelf();
 
                 }
 
@@ -95,6 +108,7 @@ public class GetMemoByIdService extends Service {
             returnIntent.putExtra("ScheduleList", resultArray);
             // *** 이제 완성된 인텐트와 startActivity()메소드를 사용하여 MainActivity 액티비티를 호출한다. ***
             startActivity(returnIntent);
+            stopSelf();
 
 
         }

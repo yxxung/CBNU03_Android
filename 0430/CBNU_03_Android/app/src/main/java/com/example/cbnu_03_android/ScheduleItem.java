@@ -4,6 +4,7 @@ import android.content.Intent;
 
 import java.io.Serializable;
 
+@SuppressWarnings("serial")
 public class ScheduleItem implements Serializable {
 
     //실질적으로 DB에 저장되는 부분
