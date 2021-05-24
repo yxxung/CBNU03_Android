@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#CC99FF">
+
+<LinearLayout
+    android:padding="10dp"
+    android:layout_above="@+id/gridview"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <Button
+        android:id="@+id/left_press"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#CC99FF"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:text="◀" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="#CC99FF"
+        android:text="May"
+        android:textColor="#ffffffff"
+        android:textSize="35sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/right_press"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#CC99FF"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:text="▶" />
+
+    <Button
+        android:id="@+id/goMemo"
+        android:layout_width="0dp"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        android:text="메모 작성"/>
+
+</LinearLayout>
+
+    <Button
+        android:id="@+id/api_share"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="api테스트엑티비티" />
+    <Button
+        android:id="@+id/api_db"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DB테스트엑티비티" />
+
+    <GridView
+        android:layout_marginTop="10dp"
+        android:id="@+id/gridview"
+        android:layout_weight="1"
+        android:layout_height="0dp"
+        android:background="#ffffffff"
+        android:layout_width="match_parent"
+        android:numColumns="7"
+        >
+
+    </GridView>
+
+</LinearLayout>
