@@ -3,6 +3,7 @@ package com.example.cbnu_03_android;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,8 +26,11 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -89,10 +93,68 @@ public class ViewSchedule extends Activity {
 
         listView.setAdapter(adapter);
 
+        /**
+         * @author 최제현
+         * DB접근을 위해 String format 변경
+         * DB접근 후 Adapter의 ArrayList<ScheduleItem>에 항목 추가.
+         */
+
+//        String stringDate = Integer.toString(position2+1);
+//        String fixedPosition = position;
+//            if(position2<9){
+//                stringDate = "0" + Integer.toString(position2+1);
+//            }
+//            if(Integer.parseInt(position) < 10){
+//                fixedPosition = "0" + position;
+//            }
+                    //date를 받아와야함.
+            String id = "1";
+            String date = "2021/" + (position2+1) +  "/"  + position;
+            Long longDateTime = null;
+
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            try {
+                longDateTime = dateFormat.parse(date).getTime();
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            db = FirebaseDatabase.getInstance().getReference();
+
+            db.child(id).orderByChild("longDate").equalTo(longDateTime).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                        if (snapshot.getValue() != null) {
+                            int i = 0;
+                            //snapshot의 정보, schedule 객체로 변환
+                            ScheduleItem scheduleItem = postSnapshot.getValue(ScheduleItem.class);
+                            adapter.addItem(scheduleItem);
+                            i++;
+                        } else {
+                            Log.w("FireBaseData", "loadPost:onCancelled");
+                        }
+                    }
+                    adapter.notifyDataSetChanged();
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
+                }
+            });
+
+        /**
+         * DB 활동 종료.
+         */
+
         // 이벤트 처리 리스너 설정
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
                 ScheduleItem item = (ScheduleItem) adapter.getItem(position);
                 Toast.makeText(getApplicationContext(), "선택 :"+ position, Toast.LENGTH_SHORT).show();
 
@@ -168,20 +230,20 @@ public class ViewSchedule extends Activity {
                     DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                     try {
                         Date addDatetime = dateFormat.parse(makeStringDate);
-                        
+
+                            //db 키생성
+                            String key = db.child(defaultId).push().getKey();
                             //addDateTime.getTime long으로 Datetime 변경
                             ScheduleItem scheduleItem = new ScheduleItem(addDatetime.getTime(), makeStringDate, schedule, schedule2);
                             scheduleItem.setMonth(month);
-                            adapter.addItem(scheduleItem);
-                            adapter.notifyDataSetChanged();
+                            scheduleItem.setScheduleKey(key);
+                            scheduleItem.setIsAddedGoogleAPI(0);
                             editText.setText(null);
                             editText2.setText(null);
 
                         /**
                          * @author 일정 생성시 자동으로 데이터 베이스 저장
                          */
-                        //키 자동생성, 및 삽입
-                        String key = db.child(defaultId).push().getKey();
                         //해당 키 위치에 데이터 삽입
                         db.child(defaultId).child(key).setValue(scheduleItem)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -258,6 +320,10 @@ public class ViewSchedule extends Activity {
             } else {
                 view = (ScheduleItemView) convertView;
             }
+            System.out.println(position);
+
+
+
 
             ScheduleItem item = items.get(position);
 
