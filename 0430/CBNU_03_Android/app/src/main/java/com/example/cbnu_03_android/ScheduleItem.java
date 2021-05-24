@@ -2,23 +2,23 @@ package com.example.cbnu_03_android;
 
 import android.content.Intent;
 
-public class ScheduleItem {
+import java.io.Serializable;
+
+@SuppressWarnings("serial")
+public class ScheduleItem implements Serializable {
+
+    //실질적으로 DB에 저장되는 부분
     Long longDate;
     String stringDate;
     String schedule;
     String schedule2;
-
-
-
-
-
-   // 객체를 좀더 편하게 이용하기 위해 선언된 멤버변수
-
-
-
     int month;
+    String scheduleKey;
+    int isAddedGoogleAPI;
+
+// 객체를 좀더 편하게 이용하기 위해 선언된 멤버변수
+
     String date;
-    String parsedDate[];
     String year;
     String dayOfMonth;
 
@@ -86,14 +86,6 @@ public class ScheduleItem {
         this.longDate = longDate;
     }
 
-    public String[] getParsedDate() {
-        return parsedDate;
-    }
-
-    public void setParsedDate(String[] parsedDate) {
-        this.parsedDate = parsedDate;
-    }
-
     public String getYear() {
         return year;
     }
@@ -112,6 +104,23 @@ public class ScheduleItem {
 
     public void setMonth(int month) {
         this.month = month;
+    }
+
+    public String getScheduleKey() {
+        return scheduleKey;
+    }
+
+    public void setScheduleKey(String scheduleKey) {
+        this.scheduleKey = scheduleKey;
+    }
+
+
+    public int getIsAddedGoogleAPI() {
+        return isAddedGoogleAPI;
+    }
+
+    public void setIsAddedGoogleAPI(int isAddedGoogleAPI) {
+        this.isAddedGoogleAPI = isAddedGoogleAPI;
     }
 
 }
