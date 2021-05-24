@@ -98,7 +98,6 @@ public class ViewSchedule extends Activity {
          * DB접근을 위해 String format 변경
          * DB접근 후 Adapter의 ArrayList<ScheduleItem>에 항목 추가.
          */
-
 //        String stringDate = Integer.toString(position2+1);
 //        String fixedPosition = position;
 //            if(position2<9){
@@ -121,9 +120,11 @@ public class ViewSchedule extends Activity {
 
             db = FirebaseDatabase.getInstance().getReference();
 
+
             db.child(id).orderByChild("longDate").equalTo(longDateTime).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    adapter.clearList();
                     for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                         if (snapshot.getValue() != null) {
                             int i = 0;
@@ -174,10 +175,19 @@ public class ViewSchedule extends Activity {
                 builder.setTitle("선택한 일정을 삭제하겠습니까?");
 
                 builder.setPositiveButton("삭제", new DialogInterface.OnClickListener(){
+                    /**
+                     * @author 최제현
+                     * @param dialog
+                     * @param id
+                     *
+                     * 해당 메모를 삭제하기 위해 DB접근
+                     */
+
                     @Override
                     public void onClick(DialogInterface dialog, int id)
                     {
                         //adapter.items.clear();
+                        db.child("1").child(adapter.items.get(i).getScheduleKey()).removeValue();
                         adapter.items.remove(i);
                         adapter.notifyDataSetChanged();
                     }
@@ -262,7 +272,7 @@ public class ViewSchedule extends Activity {
                                     }
                                 });
                         /**
-                         *
+                         * DB저장종
                          */
 
 
@@ -320,17 +330,18 @@ public class ViewSchedule extends Activity {
             } else {
                 view = (ScheduleItemView) convertView;
             }
-            System.out.println(position);
-
-
-
 
             ScheduleItem item = items.get(position);
 
             view.setSchedule(item.getSchedule());
             view.setSchedule2(item.getSchedule2());
 
+
             return view;
+        }
+
+        public void clearList(){
+            items.clear();
         }
     }
 
