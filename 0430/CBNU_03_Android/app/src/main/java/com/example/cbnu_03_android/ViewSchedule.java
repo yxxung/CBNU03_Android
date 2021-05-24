@@ -98,7 +98,6 @@ public class ViewSchedule extends Activity {
          * DB접근을 위해 String format 변경
          * DB접근 후 Adapter의 ArrayList<ScheduleItem>에 항목 추가.
          */
-
 //        String stringDate = Integer.toString(position2+1);
 //        String fixedPosition = position;
 //            if(position2<9){
@@ -176,21 +175,19 @@ public class ViewSchedule extends Activity {
                 builder.setTitle("선택한 일정을 삭제하겠습니까?");
 
                 builder.setPositiveButton("삭제", new DialogInterface.OnClickListener(){
+                    /**
+                     * @author 최제현
+                     * @param dialog
+                     * @param id
+                     *
+                     * 해당 메모를 삭제하기 위해 DB접근
+                     */
+
                     @Override
                     public void onClick(DialogInterface dialog, int id)
                     {
                         //adapter.items.clear();
-                        db.child("1").orderByChild("longDate").equalTo(adapter.items.get(i).getScheduleKey()).addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                snapshot.getRef().removeValue();
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
-                            }
-                        });
+                        db.child("1").child(adapter.items.get(i).getScheduleKey()).removeValue();
                         adapter.items.remove(i);
                         adapter.notifyDataSetChanged();
                     }
