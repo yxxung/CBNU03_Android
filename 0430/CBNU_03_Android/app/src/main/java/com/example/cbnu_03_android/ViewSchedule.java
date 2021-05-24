@@ -121,9 +121,11 @@ public class ViewSchedule extends Activity {
 
             db = FirebaseDatabase.getInstance().getReference();
 
+
             db.child(id).orderByChild("longDate").equalTo(longDateTime).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    adapter.clearList();
                     for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                         if (snapshot.getValue() != null) {
                             int i = 0;
@@ -178,6 +180,17 @@ public class ViewSchedule extends Activity {
                     public void onClick(DialogInterface dialog, int id)
                     {
                         //adapter.items.clear();
+                        db.child("1").orderByChild("longDate").equalTo(adapter.items.get(i).getScheduleKey()).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                snapshot.getRef().removeValue();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
+                            }
+                        });
                         adapter.items.remove(i);
                         adapter.notifyDataSetChanged();
                     }
@@ -262,7 +275,7 @@ public class ViewSchedule extends Activity {
                                     }
                                 });
                         /**
-                         *
+                         * DB저장종
                          */
 
 
@@ -320,17 +333,18 @@ public class ViewSchedule extends Activity {
             } else {
                 view = (ScheduleItemView) convertView;
             }
-            System.out.println(position);
-
-
-
 
             ScheduleItem item = items.get(position);
 
             view.setSchedule(item.getSchedule());
             view.setSchedule2(item.getSchedule2());
 
+
             return view;
+        }
+
+        public void clearList(){
+            items.clear();
         }
     }
 
