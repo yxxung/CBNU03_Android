@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +35,8 @@ public class MemoActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
     Button btnAdd;
+
+    private DatabaseReference db;
 
     List<Memo> memoList;
 
@@ -43,6 +55,48 @@ public class MemoActivity extends AppCompatActivity {
         recyclerAdapter = new RecyclerAdapter(memoList);
         recyclerView.setAdapter(recyclerAdapter);
         btnAdd = findViewById(R.id.btnAdd);
+
+
+        /**
+         * @author 최제현
+         * DB접근 후 Adapter의 List<Memo>에 항목 추가.
+         */
+
+        //date를 받아와야함.
+        String id = "memo"+"1";
+
+        db = FirebaseDatabase.getInstance().getReference();
+
+
+        db.child(id).orderByChild("date").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                recyclerAdapter.clearList();
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    if (snapshot.getValue() != null) {
+                        int i = 0;
+                        //snapshot의 정보, schedule 객체로 변환
+                        Memo memo = postSnapshot.getValue(Memo.class);
+                        recyclerAdapter.addItem(memo);
+                        i++;
+                    } else {
+                        Log.w("FireBaseData", "loadPost:onCancelled");
+                    }
+                }
+               recyclerAdapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
+            }
+        });
+
+        /**
+         * DB 활동 종료.
+         */
+
 
         //새로운 메모 작성
         btnAdd.setOnClickListener(new View.OnClickListener() {
@@ -67,11 +121,11 @@ public class MemoActivity extends AppCompatActivity {
             String strMain = data.getStringExtra("main");
             String strSub = data.getStringExtra("sub");
 
-            //받아온 데이터로 메모만듦
-            com.example.cbnu_03_android.Memo memo = new com.example.cbnu_03_android.Memo(strMain, strSub, 0);
-            //adapter의 addItem으로 생성된 메모 추가
-            recyclerAdapter.addItem(memo);
-            recyclerAdapter.notifyDataSetChanged();
+//            //받아온 데이터로 메모만듦
+//            com.example.cbnu_03_android.Memo memo = new com.example.cbnu_03_android.Memo(strMain, strSub, 0);
+//            //adapter의 addItem으로 생성된 메모 추가
+//            recyclerAdapter.addItem(memo);
+//            recyclerAdapter.notifyDataSetChanged();
         }
     }
 
@@ -135,6 +189,10 @@ public class MemoActivity extends AppCompatActivity {
                 subtext = itemView.findViewById(R.id.item_subtext);
                 img = itemView.findViewById(R.id.item_image);
             }
+        }
+
+        public void clearList(){
+            listdata.clear();
         }
     }
 

@@ -272,7 +272,7 @@ public class ViewSchedule extends Activity {
                                     }
                                 });
                         /**
-                         * DB저장종
+                         * DB저장종료
                          */
 
 
