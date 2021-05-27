@@ -27,15 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".GetMemobyDateService"
-            android:enabled="true"
-            android:exported="true"></service>
-        <service
-            android:name=".GetMemoByIdService"
-            android:enabled="true"
-            android:exported="true" />
         <activity
             android:name=".ViewSchedule"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
