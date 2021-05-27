@@ -27,12 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".CalendarAPIActivity"
-            android:label="CalenderAPIActivity" />
-        <activity
-            android:name=".ConnectDBActivity"
-            android:label="Google FireBase API test activity" />
+
         <service
             android:name=".GetMemobyDateService"
             android:enabled="true"
