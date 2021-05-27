@@ -16,6 +16,11 @@ import com.google.api.client.util.ExponentialBackOff;
 import com.google.api.services.calendar.CalendarScopes;
 
 import com.google.api.services.calendar.model.*;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import android.Manifest;
 import android.accounts.AccountManager;
@@ -36,8 +41,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,7 +76,9 @@ public class CalendarAPIActivity extends Activity {
     private Button mGetEventButton;
     private Button mAddEventButton;
     private Button mAddCalendarButton;
+    private DatabaseReference db;
     ProgressDialog mProgress;
+    ArrayList<ScheduleItem> scheduleItemArrayList = new ArrayList<ScheduleItem>();
 
 
     static final int REQUEST_ACCOUNT_PICKER = 1000;
@@ -96,6 +106,9 @@ public class CalendarAPIActivity extends Activity {
         mResultText = (TextView) findViewById(R.id.textview_main_result);
 
 
+
+
+        System.out.println("break point");
         /**
          * 버튼 클릭으로 동작 테스트
          */
@@ -574,6 +587,9 @@ public class CalendarAPIActivity extends Activity {
                             .setColorRgbFormat(true)
                             .execute();
 
+
+
+
             // 새로 추가한 캘린더의 ID를 리턴
             return "캘린더가 생성되었습니다.";
         }
@@ -612,59 +628,96 @@ public class CalendarAPIActivity extends Activity {
 
         private String addEvent() {
 
+            db = FirebaseDatabase.getInstance().getReference();
 
-            String calendarID = getCalendarID("CalendarTitle");
+            //만약 login 구현한다면 사용,
+            String id = "1";
+
+
+            db.child(id).orderByChild("longDate").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                        if (snapshot.getValue() != null) {
+                            int i = 0;
+                            //snapshot의 정보, schedule 객체로 변환
+                            ScheduleItem scheduleItem = postSnapshot.getValue(ScheduleItem.class);
+                            scheduleItemArrayList.add(i,scheduleItem);
+                            i++;
+                        } else {
+                            Log.w("FireBaseData", "loadPost:onCancelled");
+                        }
+                    }
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
+                }
+            });
+
+
+            String calendarID = getCalendarID("testCalender");
 
             if ( calendarID == null ){
 
-                return "캘린더를 먼저 생성하세요.";
+                return "구글캘린더와 연결해주세요.";
 
             }
 
-            Event event = new Event()
-                    .setSummary("구글 캘린더 테스트")
-                    .setLocation("서울시")
-                    .setDescription("캘린더에 이벤트 추가하는 것을 테스트합니다.");
+            Event event = new Event();
+//                    .setSummary("구글 캘린더 테스트")
+//                    .setLocation("서울시")
+//                    .setDescription("캘린더에 이벤트 추가하는 것을 테스트합니다.");
 
+            System.out.println("break point");
 
-            java.util.Calendar calander;
+            for(ScheduleItem selectedItem : scheduleItemArrayList ){
 
-            calander = java.util.Calendar.getInstance();
-            SimpleDateFormat simpledateformat;
-            //simpledateformat = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ssZ", Locale.KOREA);
-            // Z에 대응하여 +0900이 입력되어 문제 생겨 수작업으로 입력
-            simpledateformat = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss+09:00", Locale.KOREA);
-            String datetime = simpledateformat.format(calander.getTime());
+                if(selectedItem.getIsAddedGoogleAPI() != 0) break;
 
-            DateTime startDateTime = new DateTime(datetime);
-            EventDateTime start = new EventDateTime()
-                    .setDateTime(startDateTime)
-                    .setTimeZone("Asia/Seoul");
-            event.setStart(start);
+                event.setSummary(selectedItem.schedule)
+                        .setDescription(selectedItem.schedule2);
 
-            Log.d( "@@@", datetime );
+                SimpleDateFormat simpledateformat;
+                //simpledateformat = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ssZ", Locale.KOREA);
+                // Z에 대응하여 +0900이 입력되어 문제 생겨 수작업으로 입력
+                simpledateformat = new SimpleDateFormat( "yyyy-MM-dd'T'HH:mm:ss+09:00", Locale.KOREA);
+                String datetime = simpledateformat.format(selectedItem.getLongDate());
 
+                DateTime startDateTime = new DateTime(datetime);
+                EventDateTime start = new EventDateTime()
+                        .setDateTime(startDateTime)
+                        .setTimeZone("Asia/Seoul");
+                event.setStart(start);
 
-            DateTime endDateTime = new  DateTime(datetime);
-            EventDateTime end = new EventDateTime()
-                    .setDateTime(endDateTime)
-                    .setTimeZone("Asia/Seoul");
-            event.setEnd(end);
+                DateTime endDateTime = new  DateTime(datetime);
+                EventDateTime end = new EventDateTime()
+                        .setDateTime(endDateTime)
+                        .setTimeZone("Asia/Seoul");
+                event.setEnd(end);
 
-            //String[] recurrence = new String[]{"RRULE:FREQ=DAILY;COUNT=2"};
-            //event.setRecurrence(Arrays.asList(recurrence));
+                try {
+                    event = mService.events().insert(calendarID, event).execute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Log.e("Exception", "Exception : " + e.toString());
+                }
 
+                try{
+                    Thread.sleep(100);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
 
-            try {
-                event = mService.events().insert(calendarID, event).execute();
-            } catch (Exception e) {
-                e.printStackTrace();
-                Log.e("Exception", "Exception : " + e.toString());
+                System.out.printf("Event created: %s\n", event.getHtmlLink());
+                Log.e("Event", "created : " + event.getHtmlLink());
+                String eventStrings = "created : " + event.getHtmlLink();
+
             }
-            System.out.printf("Event created: %s\n", event.getHtmlLink());
-            Log.e("Event", "created : " + event.getHtmlLink());
-            String eventStrings = "created : " + event.getHtmlLink();
-            return eventStrings;
+
+            return "이벤트추가";
         }
     }
 
