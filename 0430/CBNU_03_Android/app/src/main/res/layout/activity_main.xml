@@ -47,7 +47,7 @@
         android:layout_weight="1"
         android:layout_height="wrap_content"
         android:textStyle="bold"
-        android:text="메모 작성"/>
+        android:text="메모"/>
 
 </LinearLayout>
 
