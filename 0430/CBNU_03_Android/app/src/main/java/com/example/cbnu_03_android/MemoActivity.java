@@ -39,7 +39,7 @@ public class MemoActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
-    Button btnAdd;
+    Button btnAdd, btnNo;
 
     private DatabaseReference db;
 
