@@ -66,6 +66,7 @@ public class AddActivity extends AppCompatActivity {
                     newMemo.setMaintext(str);
                     newMemo.setSubtext(substr);
                     newMemo.setDate(date.getTime());
+                    newMemo.setKey(key);
 
                     db.child(defaultId).child(key).setValue(newMemo)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {

@@ -180,18 +180,21 @@ public class ViewSchedule extends Activity {
                      * @param dialog
                      * @param id
                      *
-                     * 해당 메모를 삭제하기 위해 DB접근
+                     * 해당 일를 삭제하기 위해 DB접근
                      */
 
                     @Override
                     public void onClick(DialogInterface dialog, int id)
                     {
-                        //adapter.items.clear();
                         db.child("1").child(adapter.items.get(i).getScheduleKey()).removeValue();
                         adapter.items.remove(i);
                         adapter.notifyDataSetChanged();
                     }
                 });
+
+                /**
+                 * 일정 삭제
+                 */
 
                 builder.setNegativeButton("취소", new DialogInterface.OnClickListener(){
                     @Override

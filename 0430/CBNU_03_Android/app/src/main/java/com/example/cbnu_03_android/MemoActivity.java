@@ -6,17 +6,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -106,6 +111,10 @@ public class MemoActivity extends AppCompatActivity {
                 startActivityForResult(intent, 0); //입력한 텍스트를 MemoActivity로 가져옴
             }
         });
+
+
+
+
     }
 
     //startActivityForResult로 실행한 액티비티가 끝났을 때 여기서 데이터를 받음
@@ -188,7 +197,63 @@ public class MemoActivity extends AppCompatActivity {
                 maintext = itemView.findViewById(R.id.item_maintext);
                 subtext = itemView.findViewById(R.id.item_subtext);
                 img = itemView.findViewById(R.id.item_image);
+
+                /**
+                 * @author 최제현
+                 * recyclerview 내에서, 메모를 삭제하기 위한 listner
+                 * longclick시 발
+                 */
+
+                itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View view) {
+                        int pos = getAdapterPosition();
+                        if (pos != RecyclerView.NO_POSITION){
+
+
+                            android.app.AlertDialog.Builder builder = new AlertDialog.Builder(MemoActivity.this);
+
+                            builder.setTitle("선택한 일정을 삭제하겠습니까?");
+
+                            builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    try{
+                                        Memo memo = listdata.get(pos);
+                                        db.child("memo"+"1").child(memo.getKey()).removeValue();
+                                        listdata.remove(pos);
+                                        recyclerAdapter.notifyDataSetChanged();
+                                    }catch (Exception e){
+                                        e.printStackTrace();
+                                        Toast.makeText(MemoActivity.this, "알 수 없는 에", Toast.LENGTH_SHORT).show();
+                                    }
+
+
+                                }
+                            });
+
+                            builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            });
+
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+
+                        }
+
+                        return true;
+
+                    }
+                });
+                /**
+                 * 삭제 완료
+                 */
             }
+
         }
 
         public void clearList(){
