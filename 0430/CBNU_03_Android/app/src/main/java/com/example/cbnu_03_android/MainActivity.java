@@ -28,7 +28,8 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    public int MONTH_COUNT = 0;
+    public int YEAR_COUNT=0;
+    public int MONTH_COUNT = now_month();
     private TextView tvDate;
     private GridAdapter gridAdapter;
     private ArrayList<String> dayList;
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 MONTH_COUNT=MONTH_COUNT-1;
-                //new_month(MONTH_COUNT);
+                new_month(MONTH_COUNT);
             }
         });
 
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 MONTH_COUNT=MONTH_COUNT+1;
-                //new_month(MONTH_COUNT);
+                new_month(MONTH_COUNT);
             }
         });
 
@@ -81,6 +82,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private int now_month(){
+        Calendar cal = Calendar.getInstance();
+        int month = cal.get(Calendar.MONTH);
+        return month+1;
+    }
+
     private void new_month(int cnt)
     {
 
@@ -89,12 +96,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         final SimpleDateFormat curYearFormat = new SimpleDateFormat("yyyy", Locale.KOREA);
-        final SimpleDateFormat curMonthFormat = new SimpleDateFormat("MM", Locale.KOREA);
-        final SimpleDateFormat curDayFormat = new SimpleDateFormat("dd", Locale.KOREA);
+        Calendar yea = Calendar.getInstance();
+        final SimpleDateFormat df = new SimpleDateFormat("MMMM", Locale.US);
+        Calendar cal = Calendar.getInstance();
 
-        final SimpleDateFormat curMonthFormat2 = new SimpleDateFormat("MMMM", Locale.US);
+        int month_sum_count=MONTH_COUNT-5;
 
-        tvDate.setText(curMonthFormat2.format(date));
+        cal.add ( cal.MONTH, + month_sum_count );
+
+
+        tvDate.setText(df.format(cal.getTime()));
 
         dayList = new ArrayList<String>();
         dayList.add("일");
@@ -107,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
 
         mCal = Calendar.getInstance();
 
-        mCal.set(Integer.parseInt(curYearFormat.format(date)), Integer.parseInt(curMonthFormat.format(date)) - 1, 1);
+        mCal.set(Integer.parseInt(curYearFormat.format(date)), cnt - 1, 1);
         int dayNum = mCal.get(Calendar.DAY_OF_WEEK);
 
         for (int i = 1; i < dayNum; i++) {
@@ -118,20 +129,20 @@ public class MainActivity extends AppCompatActivity {
         gridAdapter = new GridAdapter(getApplicationContext(), dayList);
         gridView.setAdapter(gridAdapter);
 
-        //0516 이명국 수정 _ 기존 alertDialog-> Gridview 클릭시 ViewSchedule activity(popup)로 이동 -> grid별 position 추출
+        //이명국 수정
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    Intent intent = new Intent(MainActivity.this, ViewSchedule.class);
-                    //Toast.makeText(MainActivity.this, dayList.get(position).toString(), Toast.LENGTH_SHORT).show();
-                    intent.putExtra("position", dayList.get(position));
-                    intent.putExtra("position2", mCal.get(Calendar.MONTH));
-                    startActivityForResult(intent, 1);
+                Intent intent = new Intent(MainActivity.this, ViewSchedule.class);
+                //Toast.makeText(MainActivity.this, dayList.get(position).toString(), Toast.LENGTH_SHORT).show();
+                intent.putExtra("position", dayList.get(position));
+                intent.putExtra("position2", cal.get(Calendar.MONTH));
+                startActivityForResult(intent, 1);
 
             }
         });
-        //0516 이명국_수정 끝
+        //이명국_수정 끝
 
 
     }

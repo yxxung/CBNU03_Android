@@ -157,7 +157,6 @@ public class ViewSchedule extends Activity {
 
 
                 ScheduleItem item = (ScheduleItem) adapter.getItem(position);
-                Toast.makeText(getApplicationContext(), "선택 :"+ position, Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -295,6 +294,15 @@ public class ViewSchedule extends Activity {
                 }
 
 
+            }
+        });
+
+        TextView exit;
+        exit = (TextView) findViewById(R.id.exit);
+        exit.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                finish();
             }
         });
     }
