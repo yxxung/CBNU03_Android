@@ -28,20 +28,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".CalendarAPIActivity"
-            android:label="CalenderAPIActivity" />
-        <activity
-            android:name=".ConnectDBActivity"
-            android:label="Google FireBase API test activity" />
-        <service
-            android:name=".GetMemobyDateService"
-            android:enabled="true"
-            android:exported="true"></service>
-        <service
-            android:name=".GetMemoByIdService"
-            android:enabled="true"
-            android:exported="true" />
-        <activity
             android:name=".ViewSchedule"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
     </application>

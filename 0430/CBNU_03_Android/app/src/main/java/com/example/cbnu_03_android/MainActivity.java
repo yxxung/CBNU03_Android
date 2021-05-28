@@ -35,7 +35,6 @@ public class MainActivity extends AppCompatActivity {
     private GridView gridView;
     private Calendar mCal;
     private Button left_press, right_press, goMemo;
-    private Button btnApi, btnDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +44,6 @@ public class MainActivity extends AppCompatActivity {
         tvDate = (TextView)findViewById(R.id.tv_date);
         gridView = (GridView)findViewById(R.id.gridview);
 
-        //api 연동 엑티비티로 가기위한 버튼
-        btnApi = (Button) findViewById(R.id.api_share);
-        btnDB = (Button) findViewById(R.id.api_db);
 
         // 오늘에 날짜를 세팅 해준다.
         left_press = (Button)findViewById(R.id.left_press);
@@ -82,45 +78,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         new_month(MONTH_COUNT);
-        /**
-         * @author 최제현
-         * @date 2021/05/05
-         *
-         * 버튼 클릭시, api연동 엑티비티로 이동
-         */
 
-        btnApi.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getApplicationContext(),
-                        CalendarAPIActivity.class);
-
-                startActivity(intent);
-                finish();
-
-
-            }
-        });
-
-        btnDB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                Intent intent = new Intent(getApplicationContext(),
-                        ConnectDBActivity.class);
-
-
-//                try{
-                    startActivity(intent);
-//                }catch (Exception e){
-//                    e.printStackTrace();
-//                }
-                finish();
-
-            }
-        });
     }
 
     private void new_month(int cnt)
