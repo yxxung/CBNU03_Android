@@ -18,15 +18,21 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
 
 
-        <activity android:name=".AddActivity" />
-        <activity android:name=".MemoActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".SplashActivity"
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <activity android:name=".MainActivity">
+
+        </activity>
+        <activity android:name=".AddActivity" />
+        <activity android:name=".MemoActivity" />
+
         <activity
             android:name=".ViewSchedule"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
