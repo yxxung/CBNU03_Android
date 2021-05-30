@@ -39,7 +39,7 @@ public class MemoActivity extends AppCompatActivity {
 
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
-    Button btnAdd;
+    Button btnAdd, btnNo;
 
     private DatabaseReference db;
 
@@ -213,7 +213,7 @@ public class MemoActivity extends AppCompatActivity {
 
                             android.app.AlertDialog.Builder builder = new AlertDialog.Builder(MemoActivity.this);
 
-                            builder.setTitle("선택한 일정을 삭제하겠습니까?");
+                            builder.setTitle("선택한 메모 삭제하겠습니까?");
 
                             builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                                 @Override

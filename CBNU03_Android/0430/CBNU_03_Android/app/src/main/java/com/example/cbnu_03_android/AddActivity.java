@@ -105,8 +105,11 @@ public class AddActivity extends AppCompatActivity {
         findViewById(R.id.btnNo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
                 finish();
-            } //finish로 바로 종료료
+            } //finish로 바로 종료
         });
+
    }
 }
