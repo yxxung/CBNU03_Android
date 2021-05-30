@@ -1,2 +1,0 @@
-include ':app'
-rootProject.name = "CBNU_03_Android"
