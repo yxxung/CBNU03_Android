@@ -98,15 +98,7 @@ public class ViewSchedule extends Activity {
          * DB접근을 위해 String format 변경
          * DB접근 후 Adapter의 ArrayList<ScheduleItem>에 항목 추가.
          */
-//        String stringDate = Integer.toString(position2+1);
-//        String fixedPosition = position;
-//            if(position2<9){
-//                stringDate = "0" + Integer.toString(position2+1);
-//            }
-//            if(Integer.parseInt(position) < 10){
-//                fixedPosition = "0" + position;
-//            }
-                    //date를 받아와야함.
+
             String id = "1";
             String date = "2021/" + (position2+1) +  "/"  + position;
             Long longDateTime = null;
@@ -121,6 +113,7 @@ public class ViewSchedule extends Activity {
             db = FirebaseDatabase.getInstance().getReference();
 
 
+            //DB 탐색
             db.child(id).orderByChild("longDate").equalTo(longDateTime).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

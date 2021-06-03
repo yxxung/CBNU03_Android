@@ -201,7 +201,7 @@ public class MemoActivity extends AppCompatActivity {
                 /**
                  * @author 최제현
                  * recyclerview 내에서, 메모를 삭제하기 위한 listner
-                 * longclick시 발
+                 * longclick시 삭제여부 묻고, DB접근후 삭제
                  */
 
                 itemView.setOnLongClickListener(new View.OnLongClickListener() {
