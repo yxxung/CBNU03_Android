@@ -192,33 +192,40 @@ public class FindGroupActivity extends AppCompatActivity {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                                 Group selectedGroup = snapshot.getValue(Group.class);
-                                                selectedGroup.userArrayList.add(loginUser);
-                                                db.child("groupList").child(group.getName()).setValue(selectedGroup).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                    @Override
-                                                    public void onSuccess(Void aVoid) {
-                                                        Toast.makeText(getApplicationContext(), "그룹에 참가하였습니다.", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
+                                                if(selectedGroup.userArrayList.size() < 6)
+                                                {
+                                                    selectedGroup.userArrayList.add(loginUser);
+                                                    db.child("groupList").child(group.getName()).setValue(selectedGroup).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Toast.makeText(getApplicationContext(), "그룹에 참가하였습니다.", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
 
-                                                db.child("userList").child(loginUser).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                                        User user = snapshot.getValue(User.class);
-                                                        user.setGroup(selectedGroup.getName());
-                                                        db.child("userList").child(loginUser).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                            @Override
-                                                            public void onSuccess(Void aVoid) {
-                                                                Toast.makeText(getApplicationContext(), "사용자 정보를 변경하였습니다.", Toast.LENGTH_SHORT).show();
-                                                                finish();
-                                                            }
-                                                        });
-                                                    }
+                                                    db.child("userList").child(loginUser).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                            User user = snapshot.getValue(User.class);
+                                                            user.setGroup(selectedGroup.getName());
+                                                            db.child("userList").child(loginUser).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                @Override
+                                                                public void onSuccess(Void aVoid) {
+                                                                    Toast.makeText(getApplicationContext(), "사용자 정보를 변경하였습니다.", Toast.LENGTH_SHORT).show();
+                                                                    finish();
+                                                                }
+                                                            });
+                                                        }
 
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError error) {
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
 
-                                                    }
-                                                });
+                                                        }
+                                                    });
+                                                }else{
+                                                    Toast.makeText(getApplicationContext(), "그룹이 가득 찼습니다.", Toast.LENGTH_SHORT).show();
+                                                    dialogInterface.cancel();
+                                                }
+
 
                                             }
 
