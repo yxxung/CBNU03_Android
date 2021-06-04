@@ -49,7 +49,7 @@ public class CreateGroupActivity extends AppCompatActivity {
 
 
                 String groupName = groupNameEdit.getText().toString();
-                String groupPurpose = groupNameEdit.getText().toString();
+                String groupPurpose = groupPurposeEdit.getText().toString();
 
                 Group newGroup = new Group();
                 newGroup.setName(groupName);

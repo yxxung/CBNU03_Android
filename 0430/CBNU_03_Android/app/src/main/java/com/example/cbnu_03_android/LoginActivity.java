@@ -21,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     Button loginButton, signUpButton;
     EditText idInputText, pwInputText;
     private DatabaseReference db;
-    public User loginUser;
+    public String loginUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +71,14 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "로그인 정보가 정확하지 않습니다!", Toast.LENGTH_SHORT).show();
                     }
                     else if(user.getPassword().equals(password)){
-                        loginUser = user;
-                        Toast.makeText(getApplicationContext(), String.format("%s님 환영합니다.", loginUser.id), Toast.LENGTH_SHORT).show();
+                        loginUser = user.getId();
+                        Toast.makeText(getApplicationContext(), String.format("%s님 환영합니다.", loginUser), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.putExtra("userName", loginUser.id);
+                        intent.putExtra("userName", loginUser);
                         startActivity(intent);
                         finish();
+                    }else{
+                        Toast.makeText(getApplicationContext(), "로그인 정보가 정확하지 않습니다!", Toast.LENGTH_SHORT).show();
                     }
                 }
                 @Override
