@@ -6,50 +6,71 @@
     android:background="#CC99FF">
 
 <LinearLayout
-    android:padding="10dp"
-    android:layout_above="@+id/gridview"
-    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/left_press"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="#CC99FF"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:text="◀" />
+    <LinearLayout
+        android:padding="10dp"
+        android:layout_above="@+id/gridview"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+        <Button
+            android:id="@+id/left_press"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#CC99FF"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="◀" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="0dp"
+            android:layout_weight="3"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:background="#CC99FF"
+            android:text="May"
+            android:textColor="#ffffffff"
+            android:textSize="35sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/right_press"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#CC99FF"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="▶" />
+
+        <Button
+            android:id="@+id/goMemo"
+            android:layout_width="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="메모"/>
+
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_date"
-        android:layout_width="0dp"
-        android:layout_weight="3"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="#CC99FF"
-        android:text="May"
-        android:textColor="#ffffffff"
-        android:textSize="35sp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/right_press"
+        android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="#CC99FF"
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:text="▶" />
-
-    <Button
-        android:id="@+id/goMemo"
-        android:layout_width="0dp"
         android:layout_marginTop="20dp"
-        android:layout_weight="1"
-        android:layout_height="wrap_content"
-        android:textStyle="bold"
-        android:text="메모"/>
+        android:background="#CC99FF"
+        android:text="Guest"
+        android:textColor="#ffffffff"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
 </LinearLayout>
+
 
     <GridView
         android:layout_marginTop="10dp"
@@ -62,5 +83,36 @@
         >
 
     </GridView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/loginBtn"
+            android:text="loginBtn"
+            android:textColor="#ffffffff"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:id="@+id/getGroupBtn"
+            android:text="Group"
+            android:textColor="#ffffffff"
+            />
+
+    </LinearLayout>
 
 </LinearLayout>

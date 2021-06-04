@@ -3,7 +3,6 @@ package com.example.cbnu_03_android;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -46,7 +44,8 @@ public class ViewSchedule extends Activity {
     EditText editText;
     EditText editText2;
     TextView monthdate;
-    String defaultId;
+
+    String id;
     ImageView button;
     ImageButton imagebutton;
 
@@ -60,6 +59,7 @@ public class ViewSchedule extends Activity {
         Intent secondIntent = getIntent();
         String position = secondIntent.getStringExtra("position");
         int position2 = secondIntent.getIntExtra("position2", 0);
+        String id = secondIntent.getStringExtra("userName");
 
         /**
          * @Author 최제현
@@ -99,7 +99,6 @@ public class ViewSchedule extends Activity {
          * DB접근 후 Adapter의 ArrayList<ScheduleItem>에 항목 추가.
          */
 
-            String id = "1";
             String date = "2021/" + (position2+1) +  "/"  + position;
             Long longDateTime = null;
 
@@ -160,7 +159,6 @@ public class ViewSchedule extends Activity {
                 Log.d("LONG CLICK", "OnLongClickListener");
                 //변경 내용 반영 함수
                 adapter.notifyDataSetChanged();
-                //Toast.makeText(getApplicationContext(), "롱클릭", Toast.LENGTH_SHORT).show();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(ViewSchedule.this);
 
@@ -178,7 +176,7 @@ public class ViewSchedule extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int id)
                     {
-                        db.child("1").child(adapter.items.get(i).getScheduleKey()).removeValue();
+                        db.child(ViewSchedule.this.id).child(adapter.items.get(i).getScheduleKey()).removeValue();
                         adapter.items.remove(i);
                         adapter.notifyDataSetChanged();
                     }
@@ -211,7 +209,7 @@ public class ViewSchedule extends Activity {
                 int month = position2+1;
                 String date = position;
                 //db에 저장하기 위한 id기본값 나중에 확장을 위해 추가.
-                defaultId = "1";
+                ViewSchedule.this.id = id;
                 //schedule = 일정, schedule2 = 상세 일정
                 String schedule = editText.getText().toString();
                 String schedule2 = editText2.getText().toString();
@@ -237,7 +235,7 @@ public class ViewSchedule extends Activity {
                         Date addDatetime = dateFormat.parse(makeStringDate);
 
                             //db 키생성
-                            String key = db.child(defaultId).push().getKey();
+                            String key = db.child(ViewSchedule.this.id).push().getKey();
                             //addDateTime.getTime long으로 Datetime 변경
                             ScheduleItem scheduleItem = new ScheduleItem(addDatetime.getTime(), makeStringDate, schedule, schedule2);
                             scheduleItem.setMonth(month);
@@ -250,7 +248,7 @@ public class ViewSchedule extends Activity {
                          * @author 일정 생성시 자동으로 데이터 베이스 저장
                          */
                         //해당 키 위치에 데이터 삽입
-                        db.child(defaultId).child(key).setValue(scheduleItem)
+                        db.child(ViewSchedule.this.id).child(key).setValue(scheduleItem)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {

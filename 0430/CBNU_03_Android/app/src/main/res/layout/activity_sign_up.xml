@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SignUpActivity"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:id="@+id/signup_title"
+            android:background="#CC99FF"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:minHeight="?actionBarSize"
+            android:padding="16dp"
+            android:text="회원가입"
+            android:textSize="25dp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10sp"/>
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:text="ID: "
+            android:id="@+id/id"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/id"
+            android:id="@+id/idEdit"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:text="PW: "
+            android:layout_below="@id/id"
+            android:id="@+id/password"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/id"
+            android:layout_toRightOf="@id/password"
+            android:id="@+id/pwInputText"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:text="PW Check:  "
+            android:layout_below="@id/password"
+            android:id="@+id/passwordCheck"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/passwordCheck"
+            android:layout_below="@id/password"
+            android:id="@+id/pwCheckEdit"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:text="Name: "
+            android:layout_below="@id/passwordCheck"
+            android:id="@+id/name"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/name"
+            android:layout_below="@id/passwordCheck"
+            android:id="@+id/nameEdit"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="30dp"
+            android:text="Contact: "
+            android:layout_below="@id/name"
+            android:id="@+id/phoneNumber"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/phoneNumber"
+            android:layout_below="@id/name"
+            android:id="@+id/pnEdit"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/signUpButton"
+            android:text="회원 가입"
+            android:textSize="23dp"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            />
+    </LinearLayout>
+
+</LinearLayout>

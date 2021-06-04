@@ -40,6 +40,7 @@ public class MemoActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     RecyclerAdapter recyclerAdapter;
     Button btnAdd, btnNo;
+    String loginUser;
 
     private DatabaseReference db;
 
@@ -49,6 +50,10 @@ public class MemoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memo);
+
+        Intent intent = getIntent();
+        //main activity로 받은 userId
+        loginUser = intent.getStringExtra("userName");
 
         memoList = new ArrayList<>();
 
@@ -68,12 +73,12 @@ public class MemoActivity extends AppCompatActivity {
          */
 
         //date를 받아와야함.
-        String id = "memo"+"1";
+        String memoId = "memo"+loginUser;
 
         db = FirebaseDatabase.getInstance().getReference();
 
 
-        db.child(id).orderByChild("date").addValueEventListener(new ValueEventListener() {
+        db.child(memoId).orderByChild("date").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 recyclerAdapter.clearList();
@@ -108,6 +113,7 @@ public class MemoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Intent intent = new Intent(MemoActivity.this, com.example.cbnu_03_android.AddActivity.class);
+                intent.putExtra("memoId", memoId);
                 startActivityForResult(intent, 0); //입력한 텍스트를 MemoActivity로 가져옴
             }
         });
@@ -221,7 +227,7 @@ public class MemoActivity extends AppCompatActivity {
 
                                     try{
                                         Memo memo = listdata.get(pos);
-                                        db.child("memo"+"1").child(memo.getKey()).removeValue();
+                                        db.child("memo"+loginUser).child(memo.getKey()).removeValue();
                                         listdata.remove(pos);
                                         recyclerAdapter.notifyDataSetChanged();
                                     }catch (Exception e){

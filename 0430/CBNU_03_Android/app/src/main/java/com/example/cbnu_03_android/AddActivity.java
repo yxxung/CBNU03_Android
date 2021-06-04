@@ -29,6 +29,8 @@ public class AddActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
 
+        Intent intent = getIntent();
+
         edtText = findViewById(R.id.edtMemo);
 
         /**
@@ -60,15 +62,15 @@ public class AddActivity extends AppCompatActivity {
                      * @author 일정 생성시 자동으로 데이터 베이스 저장
                      */
                     //해당 키 위치에 데이터 삽입
-                    String defaultId = "memo" + "1";
-                    String key = db.child(defaultId).push().getKey();
+                    String memoId = intent.getStringExtra("memoId");
+                    String key = db.child(memoId).push().getKey();
                     Memo newMemo = new Memo();
                     newMemo.setMaintext(str);
                     newMemo.setSubtext(substr);
                     newMemo.setDate(date.getTime());
                     newMemo.setKey(key);
 
-                    db.child(defaultId).child(key).setValue(newMemo)
+                    db.child(memoId).child(key).setValue(newMemo)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
