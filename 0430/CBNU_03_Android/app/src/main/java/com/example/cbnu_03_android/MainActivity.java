@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private int now_month(){
         Calendar cal = Calendar.getInstance();
         int month = cal.get(Calendar.MONTH);
-        return month+1;
+        return month;
     }
 
     private void new_month(int cnt)
