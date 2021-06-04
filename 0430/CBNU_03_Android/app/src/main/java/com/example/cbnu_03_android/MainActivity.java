@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     private int now_month(){
         Calendar cal = Calendar.getInstance();
         int month = cal.get(Calendar.MONTH);
-        return month;
+        return month + 1;
     }
 
     private void new_month(int cnt)
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         final SimpleDateFormat df = new SimpleDateFormat("MMMM", Locale.US);
         Calendar cal = Calendar.getInstance();
 
-        int month_sum_count=MONTH_COUNT-5;
+        int month_sum_count=MONTH_COUNT-now_month();
 
         cal.add ( cal.MONTH, + month_sum_count );
 
