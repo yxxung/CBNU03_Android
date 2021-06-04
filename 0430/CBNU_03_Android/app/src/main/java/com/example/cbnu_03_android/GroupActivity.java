@@ -25,7 +25,7 @@ import java.util.List;
 
 public class GroupActivity extends AppCompatActivity {
 
-    TextView nameTextView, purposeTextView, dateTextView, numberTextView;
+    TextView nameTextView, purposeTextView, leaderTextView, numberTextView;
     Button createGroupBtn, exitGroupBtn, findGroupBtn;
     String loginUser;
     RecyclerView recyclerView;
@@ -47,7 +47,7 @@ public class GroupActivity extends AppCompatActivity {
 
         nameTextView = (TextView)findViewById(R.id.NameTextView);
         purposeTextView = (TextView)findViewById(R.id.purposeTextView);
-        dateTextView = (TextView)findViewById(R.id.dateTextView);
+        leaderTextView = (TextView)findViewById(R.id.leaderTextView);
         numberTextView = (TextView)findViewById(R.id.numberTextView);
 
         createGroupBtn = (Button)findViewById(R.id.createGroupBtn);
@@ -102,9 +102,17 @@ public class GroupActivity extends AppCompatActivity {
                               });
                           }
 
+                            //텍스트 변경
+                          nameTextView.setText("그룹명: " + group.getName());
+                          purposeTextView.setText("목적: " + group.getPurpose());
+                          leaderTextView.setText("리더: " + group.getLeader());
+                          numberTextView.setText("인원 수: " + group.userArrayList.size());
+
+
 
                         }
 
+                        //텍스트 변
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
 
@@ -164,7 +172,7 @@ public class GroupActivity extends AppCompatActivity {
 
 
             //메인텍스트에 Memo의 메인텍스트, 서브텍스트에 Memo의 서브텍스트 삽입
-            itemViewHolder.listUserName.setText(user.getName());
+            itemViewHolder.listUserName.setText("회원이름: "+ user.getName());
             itemViewHolder.listUserContact.setText(user.getPhoneNumber());
 
         }

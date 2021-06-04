@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         userName.setText("로그인유저: "+ loginUser);
 
         if(!loginUser.equals("Guest")){
-            loginButton.setVisibility(View.INVISIBLE);
+            loginButton.setText("logout");
             groupButton.setVisibility(View.VISIBLE);
         }
 
@@ -115,8 +115,20 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+                if(loginButton.getText().toString().equals("LOGIN")){
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                }else{
+                    //로그아웃 버튼 클릭시
+                    loginUser = "Guest";
+                    userName.setText("로그인유저: "+ loginUser);
+                    groupButton.setVisibility(View.INVISIBLE);
+                    loginButton.setText("LOGIN");
+                    Toast.makeText(getApplicationContext(), "로그아웃 되었습니다.", Toast.LENGTH_SHORT).show();
+
+                }
+
+
             }
         });
 
