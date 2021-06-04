@@ -16,12 +16,15 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class AddActivity extends AppCompatActivity {
 
     EditText edtText;
     private DatabaseReference db;
+
+
 
 
     @Override

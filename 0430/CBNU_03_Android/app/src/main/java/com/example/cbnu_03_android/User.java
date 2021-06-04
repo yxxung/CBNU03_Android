@@ -6,8 +6,8 @@ public class User {
     public String password;
     public String name;
     public String phoneNumber;
-    public String point;
     public String group;
+
 
     public User(){
 
@@ -50,14 +50,6 @@ public class User {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-
-    public String getPoint() {
-        return point;
-    }
-
-    public void setPoint(String point) {
-        this.point = point;
     }
 
     public String getGroup() {

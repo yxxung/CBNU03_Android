@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#CCCCCC"
+    tools:context=".GroupActivity">
+
+    <TextView
+        android:id="@+id/login_title"
+        android:background="#CC99FF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:minHeight="?actionBarSize"
+        android:padding="16dp"
+        android:text="그룹정보"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10sp"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/groupRecyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        >
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="그룹명: "
+            android:textSize="16dp"
+            android:layout_margin="3dp"
+            android:id="@+id/NameTextView"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="목적: "
+            android:textSize="16dp"
+            android:layout_margin="3dp"
+            android:id="@+id/purposeTextView"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="리더: "
+            android:textSize="16dp"
+            android:layout_margin="3dp"
+            android:id="@+id/dateTextView"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="인원 수: "
+            android:textSize="16dp"
+            android:layout_margin="0dp"
+            android:id="@+id/numberTextView"/>
+
+
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/createGroupBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="그룹 찾기"/>
+
+    <Button
+        android:id="@+id/exitGroupBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="그룹 나가기"/>
+    <Button
+        android:id="@+id/findGroupBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="그룹 찾기"/>
+
+</LinearLayout>
