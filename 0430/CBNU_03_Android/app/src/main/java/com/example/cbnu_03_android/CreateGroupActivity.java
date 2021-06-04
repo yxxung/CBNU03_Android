@@ -55,8 +55,7 @@ public class CreateGroupActivity extends AppCompatActivity {
                 newGroup.setName(groupName);
                 newGroup.setPurpose(groupPurpose);
                 newGroup.setLeader(loginUser);
-                ArrayList<String >memberList = newGroup.getUserArrayList();
-                memberList.add(loginUser);
+                newGroup.getUserArrayList().add(loginUser);
 
                 db.child("groupList").child(groupName).setValue(newGroup)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {

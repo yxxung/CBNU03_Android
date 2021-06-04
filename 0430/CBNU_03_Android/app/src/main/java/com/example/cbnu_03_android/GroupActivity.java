@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -42,6 +40,8 @@ public class GroupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group);
 
+        db = FirebaseDatabase.getInstance().getReference();
+
         Intent intent = getIntent();
         loginUser = intent.getStringExtra("userName");
 
@@ -54,27 +54,75 @@ public class GroupActivity extends AppCompatActivity {
         exitGroupBtn = (Button)findViewById(R.id.exitGroupBtn);
         findGroupBtn = (Button)findViewById(R.id.findGroupBtn);
 
+        recyclerView = findViewById(R.id.groupRecyclerview);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(GroupActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-//        recyclerAdapter = new RecyclerAdapter(userList);
-//        recyclerView.setAdapter(recyclerAdapter);
-//
-//        db.child("userList").child(loginUser).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                User user = snapshot.getValue(User.class);
-//
-//                String selectedGroup = user.getGroup();
-//
-//
-//            }
+        userList = new ArrayList<User>();
 
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+        recyclerAdapter = new RecyclerAdapter(userList);
+        recyclerView.setAdapter(recyclerAdapter);
+
+        db.child("userList").child(loginUser).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+
+                String selectedGroup = user.getGroup();
+
+                if(selectedGroup != null) {
+
+                    //그룹이 정해져 있다면..
+                    //우선 그룹탐색
+                    db.child("groupList").child(selectedGroup).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            recyclerAdapter.clearList();
+                          Group group = snapshot.getValue(Group.class);
+
+                          ArrayList<String> userList = group.getUserArrayList();
+
+                          //username 기반으로 db에서 User 탐색
+
+                          for(String userName : userList){
+
+                              db.child("userList").child(userName).addListenerForSingleValueEvent(new ValueEventListener() {
+                                  @Override
+                                  public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                      User user = snapshot.getValue(User.class);
+                                      recyclerAdapter.addItem(user);
+                                      recyclerAdapter.notifyDataSetChanged();
+                                  }
+
+                                  @Override
+                                  public void onCancelled(@NonNull DatabaseError error) {
+
+                                  }
+                              });
+                          }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+                }
+
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
 
         createGroupBtn.setOnClickListener(new View.OnClickListener(){

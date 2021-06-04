@@ -6,11 +6,11 @@ public class Group {
 
     public String name;
     public String purpose;
-    public ArrayList<String> userList;
+    public ArrayList<String> userArrayList;
     public String leader;
 
     public Group(){
-        userList = new ArrayList<String>();
+        userArrayList = new ArrayList<String>();
     }
 
 
@@ -31,11 +31,11 @@ public class Group {
     }
 
     public ArrayList<String> getUserArrayList() {
-        return userList;
+        return userArrayList;
     }
 
     public void setUserArrayList(ArrayList<String> userList) {
-        this.userList = userList;
+        this.userArrayList = userList;
     }
 
 
