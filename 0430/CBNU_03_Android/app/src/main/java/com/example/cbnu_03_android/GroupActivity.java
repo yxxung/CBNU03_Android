@@ -70,11 +70,11 @@ public class GroupActivity extends AppCompatActivity {
 //
 //            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
 
 
         createGroupBtn.setOnClickListener(new View.OnClickListener(){
