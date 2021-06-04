@@ -5,8 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -200,10 +198,14 @@ public class GroupActivity extends AppCompatActivity {
                                         selectedGroup.setLeader(selectedGroup.userArrayList.get(0));
                                     }
 
+                                    db.child("groupList").child(searchGroup).setValue(selectedGroup).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(getApplicationContext(), "그룹에서 나왔습니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+
                                     finish();
-
-
-
                                 }
                             }
 
@@ -222,6 +224,20 @@ public class GroupActivity extends AppCompatActivity {
 
             }
         });
+
+        findGroupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent newIntent = new Intent(getApplicationContext(), FindGroupActivity.class);
+                newIntent.putExtra("userName", loginUser);
+                startActivity(newIntent);
+
+            }
+        });
+
+
+
     }
 
     //RecyclerAdapter

@@ -57,42 +57,64 @@ public class CreateGroupActivity extends AppCompatActivity {
                 newGroup.setLeader(loginUser);
                 newGroup.getUserArrayList().add(loginUser);
 
-                db.child("groupList").child(groupName).setValue(newGroup)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // Write was successful!
-                                Toast.makeText( CreateGroupActivity.this, "저장을 완료했습니다.", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                // Write failed
-                                Toast.makeText(CreateGroupActivity.this, "저장을 실패했습니다.", Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
-                            }
-                        });
-
-                db.child("userList").child(loginUser).addListenerForSingleValueEvent(new ValueEventListener() {
+                //이미 그룹 있는경우 처리필요.
+                db.child("groupList").child(groupName).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        User user = snapshot.getValue(User.class);
+                        Group group = snapshot.getValue(Group.class);
 
-                        user.setGroup(groupName);
-                        db.child("userList").child(loginUser).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Toast.makeText( CreateGroupActivity.this, "유저 정보를 변경하였습니다..", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        if(group == null) {
+
+                            db.child("groupList").child(groupName).setValue(newGroup)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // Write was successful!
+                                            Toast.makeText( CreateGroupActivity.this, "저장을 완료했습니다.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Write failed
+                                            Toast.makeText(CreateGroupActivity.this, "저장을 실패했습니다.", Toast.LENGTH_SHORT).show();
+                                            e.printStackTrace();
+                                        }
+                                    });
+
+                            db.child("userList").child(loginUser).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    User user = snapshot.getValue(User.class);
+
+                                    user.setGroup(groupName);
+                                    db.child("userList").child(loginUser).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText( CreateGroupActivity.this, "유저 정보를 변경하였습니다..", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                    Log.w("FireBaseData", "loadUser:onCancelled");
+                                }
+                            });
+
+
+                        }else{
+                            Toast.makeText(getApplicationContext(), "이미 있는 그룹입니다.", Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-                        Log.w("FireBaseData", "loadUser:onCancelled");
+
                     }
                 });
+
+
 
 
 

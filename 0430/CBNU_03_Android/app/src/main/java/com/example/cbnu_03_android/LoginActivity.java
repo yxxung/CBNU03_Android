@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     else if(user.getPassword().equals(password)){
                         loginUser = user;
-                        Toast.makeText(getApplicationContext(), String.format("%s님 가입을 환영합니다.", loginUser.id), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), String.format("%s님 환영합니다.", loginUser.id), Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         intent.putExtra("userName", loginUser.id);
                         startActivity(intent);
