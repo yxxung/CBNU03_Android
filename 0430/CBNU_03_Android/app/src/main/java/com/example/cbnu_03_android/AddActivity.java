@@ -34,6 +34,7 @@ public class AddActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
+
         edtText = findViewById(R.id.edtMemo);
 
         /**
@@ -61,17 +62,21 @@ public class AddActivity extends AppCompatActivity {
 
                     String substr = sdf.format(date);
 
+
                     /**
                      * @author 일정 생성시 자동으로 데이터 베이스 저장
                      */
                     //해당 키 위치에 데이터 삽입
+                    Intent intent = getIntent();
                     String memoId = intent.getStringExtra("memoId");
+                    String author = intent.getStringExtra("userName");
                     String key = db.child(memoId).push().getKey();
                     Memo newMemo = new Memo();
                     newMemo.setMaintext(str);
                     newMemo.setSubtext(substr);
                     newMemo.setDate(date.getTime());
                     newMemo.setKey(key);
+                    newMemo.setAuthor(author);
 
                     db.child(memoId).child(key).setValue(newMemo)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -94,7 +99,7 @@ public class AddActivity extends AppCompatActivity {
                      */
 
                     //AddActivity에서 입력받은 문자열을 MainActivity로 보내는 작업을 한다
-                    Intent intent = new Intent();
+                    intent = new Intent();
                     //Intent에 putExtra로 데이터를 넣음. key값과 value값을 넣어줌
                     intent.putExtra("main", str);
                     intent.putExtra("sub", substr);

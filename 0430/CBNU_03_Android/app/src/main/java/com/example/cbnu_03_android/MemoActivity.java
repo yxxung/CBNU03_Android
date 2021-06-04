@@ -41,6 +41,7 @@ public class MemoActivity extends AppCompatActivity {
     RecyclerAdapter recyclerAdapter;
     Button btnAdd, btnNo;
     String loginUser;
+    String userGroup;
 
     private DatabaseReference db;
 
@@ -66,42 +67,60 @@ public class MemoActivity extends AppCompatActivity {
         recyclerView.setAdapter(recyclerAdapter);
         btnAdd = findViewById(R.id.btnAdd);
 
+        db = FirebaseDatabase.getInstance().getReference();
+
 
         /**
          * @author 최제현
          * DB접근 후 Adapter의 List<Memo>에 항목 추가.
+         *
          */
-
-        //date를 받아와야함.
-        String memoId = "memo"+loginUser;
-
-        db = FirebaseDatabase.getInstance().getReference();
-
-
-        db.child(memoId).orderByChild("date").addValueEventListener(new ValueEventListener() {
+        db.child("userList").child(loginUser).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                recyclerAdapter.clearList();
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    if (snapshot.getValue() != null) {
-                        int i = 0;
-                        //snapshot의 정보, schedule 객체로 변환
-                        Memo memo = postSnapshot.getValue(Memo.class);
-                        recyclerAdapter.addItem(memo);
-                        i++;
-                    } else {
-                        Log.w("FireBaseData", "loadPost:onCancelled");
+                User user = snapshot.getValue(User.class);
+
+                userGroup = user.getGroup();
+                //date를 받아와야함.
+                String memoId = "memo"+userGroup;
+
+
+
+                db.child(memoId).orderByChild("date").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        recyclerAdapter.clearList();
+                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                            if (snapshot.getValue() != null) {
+                                int i = 0;
+                                //snapshot의 정보, schedule 객체로 변환
+                                Memo memo = postSnapshot.getValue(Memo.class);
+                                recyclerAdapter.addItem(memo);
+                                i++;
+                            } else {
+                                Log.w("FireBaseData", "loadPost:onCancelled");
+                            }
+                        }
+                        recyclerAdapter.notifyDataSetChanged();
+
                     }
-                }
-               recyclerAdapter.notifyDataSetChanged();
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
+                    }
+                });
+
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
+
             }
         });
+
+
 
         /**
          * DB 활동 종료.
@@ -113,8 +132,22 @@ public class MemoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view){
                 Intent intent = new Intent(MemoActivity.this, com.example.cbnu_03_android.AddActivity.class);
-                intent.putExtra("memoId", memoId);
-                startActivityForResult(intent, 0); //입력한 텍스트를 MemoActivity로 가져옴
+                db.child("userList").child(loginUser).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User user = snapshot.getValue(User.class);
+                        String groupName = user.getGroup();
+                        intent.putExtra("memoId", "memo" + groupName);
+                        intent.putExtra("userName", loginUser);
+                        startActivityForResult(intent, 0); //입력한 텍스트를 MemoActivity로 가져옴
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
             }
         });
 
@@ -173,7 +206,7 @@ public class MemoActivity extends AppCompatActivity {
 
             //메인텍스트에 Memo의 메인텍스트, 서브텍스트에 Memo의 서브텍스트 삽입
             itemViewHolder.maintext.setText(memo.getMaintext());
-            itemViewHolder.subtext.setText(memo.getSubtext());
+            itemViewHolder.author.setText("작성자 : " + memo.getAuthor());
 
             //이미지뷰 0,1일 때 색깔 체인지
             if (memo.getIsdone() == 0){
@@ -195,13 +228,15 @@ public class MemoActivity extends AppCompatActivity {
 
             private TextView maintext;
             private TextView subtext;
+            private TextView author;
             private ImageView img;
 
             public ItemViewHolder(@NonNull View itemView){
                 super(itemView);
 
                 maintext = itemView.findViewById(R.id.item_maintext);
-                subtext = itemView.findViewById(R.id.item_subtext);
+                author = itemView.findViewById(R.id.item_author);
+
                 img = itemView.findViewById(R.id.item_image);
 
                 /**
@@ -225,15 +260,30 @@ public class MemoActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
 
-                                    try{
-                                        Memo memo = listdata.get(pos);
-                                        db.child("memo"+loginUser).child(memo.getKey()).removeValue();
-                                        listdata.remove(pos);
-                                        recyclerAdapter.notifyDataSetChanged();
-                                    }catch (Exception e){
-                                        e.printStackTrace();
-                                        Toast.makeText(MemoActivity.this, "알 수 없는 에", Toast.LENGTH_SHORT).show();
-                                    }
+                                    db.child("userList").child(loginUser).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            User user = snapshot.getValue(User.class);
+                                            String groupName = user.getGroup();
+
+                                            try{
+                                                Memo memo = listdata.get(pos);
+                                                db.child("memo" + groupName).child(memo.getKey()).removeValue();
+                                                listdata.remove(pos);
+                                                recyclerAdapter.notifyDataSetChanged();
+                                            }catch (Exception e){
+                                                e.printStackTrace();
+                                                Toast.makeText(MemoActivity.this, "알 수 없는 에", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+
+
 
 
                                 }

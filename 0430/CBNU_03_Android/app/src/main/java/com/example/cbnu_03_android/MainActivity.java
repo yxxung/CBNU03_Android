@@ -1,4 +1,5 @@
 package com.example.cbnu_03_android;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -23,6 +24,12 @@ import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class MainActivity extends AppCompatActivity {
 
     public int YEAR_COUNT=0;
@@ -35,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
     private Calendar mCal;
     private Button left_press, right_press, goMemo, loginButton, groupButton;
     private String loginUser;
+
+    private DatabaseReference db;
 
 
     @Override
@@ -57,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         groupButton = (Button)findViewById(R.id.getGroupBtn);
         //default group 안보
         groupButton.setVisibility(View.INVISIBLE);
+
+        db = FirebaseDatabase.getInstance().getReference();
 
         /**
          * @author 최제현임
@@ -105,9 +116,33 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view){
-                Intent intent = new Intent(getApplicationContext(), MemoActivity.class);
-                intent.putExtra("userName", loginUser);
-                startActivity(intent);
+
+                db.child("userList").child(loginUser).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User user = snapshot.getValue(User.class);
+                        if(user != null){
+                            if(user.getGroup() != null){
+                                Intent intent = new Intent(getApplicationContext(), MemoActivity.class);
+                                intent.putExtra("userName", loginUser);
+                                startActivity(intent);
+                            }else{
+                                Toast.makeText(getApplicationContext(), "로그인 후 그룹에 가입해야 이용할 수 있는 서비스입니다."
+                                        , Toast.LENGTH_SHORT).show();
+                            }
+                        }else{
+                            Toast.makeText(getApplicationContext(), "로그인 후 그룹에 가입해야 이용할 수 있는 서비스입니다."
+                                    , Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
             }
         });
 
