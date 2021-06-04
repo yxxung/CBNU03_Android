@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,7 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,6 +58,10 @@ public class GroupActivity extends AppCompatActivity {
         exitGroupBtn = (Button)findViewById(R.id.exitGroupBtn);
         findGroupBtn = (Button)findViewById(R.id.findGroupBtn);
 
+
+        //기본적으로 안보임.
+        exitGroupBtn.setVisibility(View.INVISIBLE);
+
         recyclerView = findViewById(R.id.groupRecyclerview);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(GroupActivity.this);
@@ -75,6 +83,8 @@ public class GroupActivity extends AppCompatActivity {
 
                     //그룹이 정해져 있다면..
                     //우선 그룹탐색
+
+                    exitGroupBtn.setVisibility(View.VISIBLE);
                     db.child("groupList").child(selectedGroup).addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -107,6 +117,8 @@ public class GroupActivity extends AppCompatActivity {
                           purposeTextView.setText("목적: " + group.getPurpose());
                           leaderTextView.setText("리더: " + group.getLeader());
                           numberTextView.setText("인원 수: " + group.userArrayList.size());
+                          createGroupBtn.setVisibility(View.INVISIBLE);
+                          findGroupBtn.setVisibility(View.INVISIBLE);
 
 
 
@@ -132,13 +144,82 @@ public class GroupActivity extends AppCompatActivity {
             }
         });
 
-
         createGroupBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Intent newIntent = new Intent(getApplicationContext(), CreateGroupActivity.class);
                 newIntent.putExtra("userName", loginUser);
                 startActivity(newIntent);
+            }
+        });
+
+        exitGroupBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+
+                db.child("userList").child(loginUser).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        User user = snapshot.getValue(User.class);
+                        String searchGroup = user.getGroup();
+                        user.setGroup(null);
+                        db.child("userList").child(loginUser).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getApplicationContext(), "그룹에서 나왔습니다.", Toast.LENGTH_SHORT).show();
+                                createGroupBtn.setVisibility(View.VISIBLE);
+                                findGroupBtn.setVisibility(View.VISIBLE);
+                                exitGroupBtn.setVisibility(View.INVISIBLE);
+                                recyclerAdapter.clearList();
+
+                                nameTextView.setText("그룹에 가입해주세요!");
+                                purposeTextView.setText(" ");
+                                leaderTextView.setText(" ");
+                                numberTextView.setText(" ");
+
+
+                            }
+                        });
+
+                        //그룹 유저리스트에서 삭제.
+
+                        db.child("groupList").child(searchGroup).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                Group selectedGroup = snapshot.getValue(Group.class);
+
+                                //원래 한명바꼐 없으면 그냥 그룹 전체삭제.
+                                if(selectedGroup.userArrayList.size() == 1){
+                                    db.child("groupList").child(selectedGroup.getName()).removeValue();
+                                }else{
+
+                                    selectedGroup.userArrayList.remove(loginUser);
+                                    //만약.. 나가는 사람이 리더라면?
+                                    if(selectedGroup.getLeader().equals(loginUser)){
+                                        //가입한 순서대로 리더 양도.
+                                        selectedGroup.setLeader(selectedGroup.userArrayList.get(0));
+                                    }
+
+                                    finish();
+
+
+
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
             }
         });
     }
@@ -174,6 +255,7 @@ public class GroupActivity extends AppCompatActivity {
             //메인텍스트에 Memo의 메인텍스트, 서브텍스트에 Memo의 서브텍스트 삽입
             itemViewHolder.listUserName.setText("회원이름: "+ user.getName());
             itemViewHolder.listUserContact.setText(user.getPhoneNumber());
+            itemViewHolder.listUserId.setText("회원ID: " + user.getId());
 
         }
 
@@ -186,6 +268,7 @@ public class GroupActivity extends AppCompatActivity {
 
             private TextView listUserName;
             private TextView listUserContact;
+            private TextView listUserId;
             private ImageView img;
 
             public ItemViewHolder(@NonNull View itemView){
@@ -193,6 +276,8 @@ public class GroupActivity extends AppCompatActivity {
 
                 listUserName = itemView.findViewById(R.id.listUserName);
                 listUserContact = itemView.findViewById(R.id.listUserContact);
+                listUserId = itemView.findViewById(R.id.listUserId);
+
                 img = itemView.findViewById(R.id.item_image);
 
             }

@@ -35,31 +35,32 @@
         >
 
 
+<!--        순서대로 그룹이름, 목적, 리더, 회원수.-->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="그룹명: "
+            android:text="그룹에 가입해주세요! "
             android:textSize="16dp"
             android:layout_margin="3dp"
             android:id="@+id/NameTextView"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="목적: "
+            android:text=" "
             android:textSize="16dp"
             android:layout_margin="3dp"
             android:id="@+id/purposeTextView"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="리더: "
+            android:text=" "
             android:textSize="16dp"
             android:layout_margin="3dp"
             android:id="@+id/leaderTextView"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="인원 수: "
+            android:text=" "
             android:textSize="16dp"
             android:layout_margin="0dp"
             android:id="@+id/numberTextView"/>
@@ -72,7 +73,7 @@
         android:id="@+id/createGroupBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="그룹 생"/>
+        android:text="그룹 생성"/>
 
     <Button
         android:id="@+id/exitGroupBtn"
