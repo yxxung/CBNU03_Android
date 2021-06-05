@@ -142,16 +142,6 @@ public class ViewSchedule extends Activity {
          * DB 활동 종료.
          */
 
-        // 이벤트 처리 리스너 설정
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-
-                ScheduleItem item = (ScheduleItem) adapter.getItem(position);
-
-            }
-        });
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
             @Override
@@ -179,6 +169,7 @@ public class ViewSchedule extends Activity {
                         db.child(ViewSchedule.this.id).child(adapter.items.get(i).getScheduleKey()).removeValue();
                         adapter.items.remove(i);
                         adapter.notifyDataSetChanged();
+
                     }
                 });
 
@@ -282,6 +273,7 @@ public class ViewSchedule extends Activity {
 
 
 
+
                 }
 
 
@@ -294,6 +286,44 @@ public class ViewSchedule extends Activity {
             @Override
             public void onClick(View v){
                 finish();
+            }
+        });
+        // 이벤트 처리 리스너 설정
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position4, long id2) {
+                ScheduleItem item = (ScheduleItem) adapter.getItem(position4);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewSchedule.this);
+
+                builder.setTitle( item.schedule + "의 상세 일정");
+                builder.setMessage(item.schedule + "의 상세 일정을 확인 및 작성하시겠습니까?");
+                builder.setPositiveButton("확인 / 작성", new DialogInterface.OnClickListener(){
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int id2)
+                    {
+                        Intent intent2 = new Intent(ViewSchedule.this, ViewSchedule2.class);
+                        intent2.putExtra("schedule",item.schedule);
+                        intent2.putExtra("schedule2",item.schedule2);
+                        intent2.putExtra("position",position);
+                        intent2.putExtra("position2", position2);
+                        intent2.putExtra("key", item.scheduleKey);
+                        startActivityForResult(intent2, 1);
+
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int id2)
+                    {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+
+                alertDialog.show();
+
             }
         });
     }
