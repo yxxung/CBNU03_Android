@@ -11,14 +11,14 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="20dp">
-        <TextView
-            android:id="@+id/monthday"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:text="월 일"
-            android:textColor="#CC99FF"
-            android:textSize="50px" />
+            <TextView
+                android:id="@+id/monthday"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:gravity="center"
+                android:text="월 일"
+                android:textColor="#CC99FF"
+                android:textSize="50px" />
 
             <TextView
                 android:id="@+id/exit"
@@ -26,14 +26,15 @@
                 android:layout_height="60dp"
                 android:layout_gravity="right"
                 android:gravity="center"
+                android:paddingRight="10dp"
                 android:textSize="60px"
                 android:textColor="#CC99FF"
-                android:text="X" />
+                android:text="x" />
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="200dp"
             android:orientation="vertical"
             android:layout_marginTop="10dp">
 
@@ -45,7 +46,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
-                android:layout_marginTop="0dp" />
+                android:layout_marginTop="0dp"
+                />
         </LinearLayout>
 
         <LinearLayout
