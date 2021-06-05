@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -293,11 +295,102 @@ public class GroupActivity extends AppCompatActivity {
                 listUserName = itemView.findViewById(R.id.listUserName);
                 listUserContact = itemView.findViewById(R.id.listUserContact);
                 listUserId = itemView.findViewById(R.id.listUserId);
+                leaderTextView = (TextView)findViewById(R.id.leaderTextView);
+
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(leaderTextView.getText().toString().split(" ")[1].equals(loginUser)){
+                            int pos = getAdapterPosition();
+                            if(pos != RecyclerView.NO_POSITION){
+
+                                android.app.AlertDialog.Builder builder = new AlertDialog.Builder(GroupActivity.this);
+
+                                builder.setTitle("선택한 팀원을 내보내겠습니까?");
+
+                                builder.setPositiveButton("내보내기", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        int pos = getAdapterPosition();
+                                        User user = userList.get(pos);
+                                        String deleteUserName = user.getId();
+                                        if (deleteUserName.equals(loginUser)) {
+                                            Toast.makeText(getApplicationContext(), "자기자신은 내보낼 수 없습니다. 나가기를 눌러주세요.", Toast.LENGTH_SHORT).show();
+                                            dialogInterface.cancel();
+                                        } else {
+
+                                            db.child("userList").child(deleteUserName).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                    User user = snapshot.getValue(User.class);
+                                                    String searchGroup = user.getGroup();
+                                                    String deleteUserName = user.getId();
+                                                    user.setGroup(null);
+                                                    db.child("userList").child(deleteUserName).setValue(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+                                                            Toast.makeText(getApplicationContext(), "그룹에서 내보냈습니다.", Toast.LENGTH_SHORT).show();
+
+                                                        }
+                                                    });
+
+                                                    //그룹 유저리스트에서 삭제.
+
+                                                    db.child("groupList").child(searchGroup).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                        @Override
+                                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                            Group selectedGroup = snapshot.getValue(Group.class);
+
+                                                            //원래 한명바꼐 없으면 그냥 그룹 전체삭제.
+                                                            if (selectedGroup.userArrayList.size() == 1) {
+                                                                db.child("groupList").child(selectedGroup.getName()).removeValue();
+                                                            } else {
+
+                                                                selectedGroup.userArrayList.remove(deleteUserName);
+
+                                                                db.child("groupList").child(searchGroup).setValue(selectedGroup).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                    @Override
+                                                                    public void onSuccess(Void aVoid) {
+                                                                        Toast.makeText(getApplicationContext(), "그룹원목록이 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+
+                                                        @Override
+                                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                                        }
+                                                    });
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+
+                        });
+                                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        dialogInterface.cancel();
+                                    }
+                                });
+
+                                AlertDialog alertDialog = builder.create();
+                                alertDialog.show();
+                    }
+                }
 
                 img = itemView.findViewById(R.id.item_image);
 
             }
 
+        });
+            }
         }
 
         public void clearList(){
