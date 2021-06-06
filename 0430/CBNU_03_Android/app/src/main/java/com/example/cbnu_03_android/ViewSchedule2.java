@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -42,7 +43,6 @@ public class ViewSchedule2 extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         /**
          * @Author 최제현
          * DB레퍼런스 추가
@@ -251,6 +251,14 @@ public class ViewSchedule2 extends Activity {
             }
         });
 
+        TextView exit;
+        exit = (TextView) findViewById(R.id.exit);
+        exit.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                finish();
+            }
+        });
 
     }
 

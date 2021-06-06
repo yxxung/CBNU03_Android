@@ -145,7 +145,7 @@ public class ViewSchedule extends Activity {
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
             @Override
-            public boolean onItemLongClick(AdapterView parent, View v, int i, long id){
+            public boolean onItemLongClick(AdapterView parent, View v, int i, long id2){
                 Log.d("LONG CLICK", "OnLongClickListener");
                 //변경 내용 반영 함수
                 adapter.notifyDataSetChanged();
@@ -179,7 +179,7 @@ public class ViewSchedule extends Activity {
 
                 builder.setNegativeButton("취소", new DialogInterface.OnClickListener(){
                     @Override
-                    public void onClick(DialogInterface dialog, int id)
+                    public void onClick(DialogInterface dialog, int id2)
                     {
                         dialog.cancel();
                     }
@@ -291,7 +291,7 @@ public class ViewSchedule extends Activity {
         // 이벤트 처리 리스너 설정
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position4, long id2) {
+            public void onItemClick(AdapterView<?> parent, View view, int position4, long id) {
                 ScheduleItem item = (ScheduleItem) adapter.getItem(position4);
                 AlertDialog.Builder builder = new AlertDialog.Builder(ViewSchedule.this);
 
@@ -300,7 +300,7 @@ public class ViewSchedule extends Activity {
                 builder.setPositiveButton("확인 / 작성", new DialogInterface.OnClickListener(){
 
                     @Override
-                    public void onClick(DialogInterface dialog, int id2)
+                    public void onClick(DialogInterface dialog, int id)
                     {
                         Intent intent2 = new Intent(ViewSchedule.this, ViewSchedule2.class);
                         intent2.putExtra("schedule",item.schedule);
@@ -315,7 +315,7 @@ public class ViewSchedule extends Activity {
 
                 builder.setNegativeButton("취소", new DialogInterface.OnClickListener(){
                     @Override
-                    public void onClick(DialogInterface dialog, int id2)
+                    public void onClick(DialogInterface dialog, int id)
                     {
                         dialog.cancel();
                     }
