@@ -10,15 +10,18 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="20dp">
+            android:background="#BD9BDF"
+            >
             <TextView
                 android:id="@+id/monthday"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:gravity="center"
                 android:text="월 일"
-                android:textColor="#CC99FF"
-                android:textSize="50px" />
+                android:fontFamily="@font/onemobile"
+                android:textColor="#FFFFFF"
+                android:textSize="50px"
+                android:paddingTop="10dp"/>
 
             <TextView
                 android:id="@+id/exit"
@@ -27,8 +30,9 @@
                 android:layout_gravity="right"
                 android:gravity="center"
                 android:paddingRight="10dp"
+                android:fontFamily="@font/onemobile"
                 android:textSize="60px"
-                android:textColor="#CC99FF"
+                android:textColor="#FFFFFF"
                 android:text="x" />
         </FrameLayout>
 
@@ -47,6 +51,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="0dp"
+                android:dividerHeight="0px"
+                android:divider="#FFFFFF"
                 />
         </LinearLayout>
 
@@ -55,8 +61,14 @@
             android:layout_width="match_parent"
             android:layout_height="192dp"
             android:layout_gravity="center"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            >
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_weight="1"
+    android:src="@drawable/drawable_dash_line"
+    android:layerType="software"/>
 
 
             <TextView
@@ -65,6 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
+                android:fontFamily="@font/onemobile"
                 android:text="일정 입력"
                 />
 
@@ -75,6 +88,8 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:hint="일정"
+                android:fontFamily="@font/onemobile"
+                android:textColorHint="#39CC99FF"
                 android:backgroundTint = "#CC99FF"/>
 
             <EditText
@@ -84,6 +99,8 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:hint="상세일정"
+                android:textColorHint="#39CC99FF"
+                android:fontFamily="@font/onemobile"
                 android:backgroundTint = "#CC99FF"/>
 
             <ImageView

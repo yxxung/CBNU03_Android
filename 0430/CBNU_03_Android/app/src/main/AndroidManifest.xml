@@ -35,7 +35,9 @@
         <activity
             android:name=".ViewSchedule"
             android:theme="@android:style/Theme.DeviceDefault.Light.Dialog" />
-        <activity android:name=".ViewSchedule2"/>
+        <activity
+            android:name=".ViewSchedule2"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>
