@@ -300,6 +300,8 @@ public class GroupActivity extends AppCompatActivity {
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        //gropleader가 누구인지 파악, textview 에 적혀저있는것 그대로 사용.
+                        //tokenize 한다음 마지막 token만 쓴다.
                         if(leaderTextView.getText().toString().split(" ")[1].equals(loginUser)){
                             int pos = getAdapterPosition();
                             if(pos != RecyclerView.NO_POSITION){
