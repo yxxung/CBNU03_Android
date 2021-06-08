@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class AddActivity extends AppCompatActivity {
@@ -24,10 +25,15 @@ public class AddActivity extends AppCompatActivity {
     private DatabaseReference db;
 
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add);
+
+        Intent intent = getIntent();
+
 
         edtText = findViewById(R.id.edtMemo);
 
@@ -56,19 +62,23 @@ public class AddActivity extends AppCompatActivity {
 
                     String substr = sdf.format(date);
 
+
                     /**
                      * @author 일정 생성시 자동으로 데이터 베이스 저장
                      */
                     //해당 키 위치에 데이터 삽입
-                    String defaultId = "memo" + "1";
-                    String key = db.child(defaultId).push().getKey();
+                    Intent intent = getIntent();
+                    String memoId = intent.getStringExtra("memoId");
+                    String author = intent.getStringExtra("userName");
+                    String key = db.child(memoId).push().getKey();
                     Memo newMemo = new Memo();
                     newMemo.setMaintext(str);
                     newMemo.setSubtext(substr);
                     newMemo.setDate(date.getTime());
                     newMemo.setKey(key);
+                    newMemo.setAuthor(author);
 
-                    db.child(defaultId).child(key).setValue(newMemo)
+                    db.child(memoId).child(key).setValue(newMemo)
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
@@ -89,7 +99,7 @@ public class AddActivity extends AppCompatActivity {
                      */
 
                     //AddActivity에서 입력받은 문자열을 MainActivity로 보내는 작업을 한다
-                    Intent intent = new Intent();
+                    intent = new Intent();
                     //Intent에 putExtra로 데이터를 넣음. key값과 value값을 넣어줌
                     intent.putExtra("main", str);
                     intent.putExtra("sub", substr);

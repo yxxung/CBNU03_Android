@@ -14,8 +14,15 @@ public class Memo {
     Long date;
     int isdone; //메모의 완료여부
     String key;
+    String author;
 
+    public String getAuthor() {
+        return author;
+    }
 
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
     public Memo(){
         // Default constructor required for calls to DataSnapshot.getValue(FirebasePost.class)

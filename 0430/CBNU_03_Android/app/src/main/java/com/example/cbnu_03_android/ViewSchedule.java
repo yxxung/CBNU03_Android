@@ -3,7 +3,6 @@ package com.example.cbnu_03_android;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -46,7 +44,8 @@ public class ViewSchedule extends Activity {
     EditText editText;
     EditText editText2;
     TextView monthdate;
-    String defaultId;
+
+    String id;
     ImageView button;
     ImageButton imagebutton;
 
@@ -60,6 +59,7 @@ public class ViewSchedule extends Activity {
         Intent secondIntent = getIntent();
         String position = secondIntent.getStringExtra("position");
         int position2 = secondIntent.getIntExtra("position2", 0);
+        String id = secondIntent.getStringExtra("userName");
 
         /**
          * @Author 최제현
@@ -98,22 +98,44 @@ public class ViewSchedule extends Activity {
          * DB접근을 위해 String format 변경
          * DB접근 후 Adapter의 ArrayList<ScheduleItem>에 항목 추가.
          */
-//        String stringDate = Integer.toString(position2+1);
-//        String fixedPosition = position;
-//            if(position2<9){
-//                stringDate = "0" + Integer.toString(position2+1);
-//            }
-//            if(Integer.parseInt(position) < 10){
-//                fixedPosition = "0" + position;
-//            }
-                    //date를 받아와야함.
-            String id = "1";
+
             String date = "2021/" + (position2+1) +  "/"  + position;
             Long longDateTime = null;
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             try {
                 longDateTime = dateFormat.parse(date).getTime();
+                //DB 탐색
+                db.child(id).orderByChild("longDate").equalTo(longDateTime).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        adapter.clearList();
+                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                            if (postSnapshot != null) {
+                                if (snapshot.getValue() != null) {
+                                    int i = 0;
+                                    //snapshot의 정보, schedule 객체로 변환
+                                    ScheduleItem scheduleItem = postSnapshot.getValue(ScheduleItem.class);
+                                    adapter.addItem(scheduleItem);
+                                    i++;
+                                } else {
+                                    Log.w("FireBaseData", "loadPost:onCancelled");
+                                }
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
+                    }
+                });
+
+                /**
+                 * DB 활동 종료.
+                 */
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -121,53 +143,15 @@ public class ViewSchedule extends Activity {
             db = FirebaseDatabase.getInstance().getReference();
 
 
-            db.child(id).orderByChild("longDate").equalTo(longDateTime).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    adapter.clearList();
-                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                        if (snapshot.getValue() != null) {
-                            int i = 0;
-                            //snapshot의 정보, schedule 객체로 변환
-                            ScheduleItem scheduleItem = postSnapshot.getValue(ScheduleItem.class);
-                            adapter.addItem(scheduleItem);
-                            i++;
-                        } else {
-                            Log.w("FireBaseData", "loadPost:onCancelled");
-                        }
-                    }
-                    adapter.notifyDataSetChanged();
-
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
-                }
-            });
-
-        /**
-         * DB 활동 종료.
-         */
-
-        // 이벤트 처리 리스너 설정
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-                ScheduleItem item = (ScheduleItem) adapter.getItem(position);
-
-            }
-        });
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
             @Override
-            public boolean onItemLongClick(AdapterView parent, View v, int i, long id){
+            public boolean onItemLongClick(AdapterView parent, View v, int i, long id2){
                 Log.d("LONG CLICK", "OnLongClickListener");
                 //변경 내용 반영 함수
                 adapter.notifyDataSetChanged();
-                //Toast.makeText(getApplicationContext(), "롱클릭", Toast.LENGTH_SHORT).show();
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(ViewSchedule.this);
 
@@ -185,9 +169,12 @@ public class ViewSchedule extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int id)
                     {
-                        db.child("1").child(adapter.items.get(i).getScheduleKey()).removeValue();
+                        Intent intent = getIntent();
+                        String targetId = intent.getStringExtra("userName").toString();
+                        db.child(targetId).child(adapter.items.get(i).getScheduleKey()).removeValue();
                         adapter.items.remove(i);
                         adapter.notifyDataSetChanged();
+
                     }
                 });
 
@@ -197,7 +184,7 @@ public class ViewSchedule extends Activity {
 
                 builder.setNegativeButton("취소", new DialogInterface.OnClickListener(){
                     @Override
-                    public void onClick(DialogInterface dialog, int id)
+                    public void onClick(DialogInterface dialog, int id2)
                     {
                         dialog.cancel();
                     }
@@ -218,7 +205,7 @@ public class ViewSchedule extends Activity {
                 int month = position2+1;
                 String date = position;
                 //db에 저장하기 위한 id기본값 나중에 확장을 위해 추가.
-                defaultId = "1";
+                ViewSchedule.this.id = id;
                 //schedule = 일정, schedule2 = 상세 일정
                 String schedule = editText.getText().toString();
                 String schedule2 = editText2.getText().toString();
@@ -244,7 +231,7 @@ public class ViewSchedule extends Activity {
                         Date addDatetime = dateFormat.parse(makeStringDate);
 
                             //db 키생성
-                            String key = db.child(defaultId).push().getKey();
+                            String key = db.child(ViewSchedule.this.id).push().getKey();
                             //addDateTime.getTime long으로 Datetime 변경
                             ScheduleItem scheduleItem = new ScheduleItem(addDatetime.getTime(), makeStringDate, schedule, schedule2);
                             scheduleItem.setMonth(month);
@@ -257,7 +244,7 @@ public class ViewSchedule extends Activity {
                          * @author 일정 생성시 자동으로 데이터 베이스 저장
                          */
                         //해당 키 위치에 데이터 삽입
-                        db.child(defaultId).child(key).setValue(scheduleItem)
+                        db.child(ViewSchedule.this.id).child(key).setValue(scheduleItem)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -291,6 +278,7 @@ public class ViewSchedule extends Activity {
 
 
 
+
                 }
 
 
@@ -303,6 +291,44 @@ public class ViewSchedule extends Activity {
             @Override
             public void onClick(View v){
                 finish();
+            }
+        });
+        // 이벤트 처리 리스너 설정
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position4, long id) {
+                ScheduleItem item = (ScheduleItem) adapter.getItem(position4);
+                AlertDialog.Builder builder = new AlertDialog.Builder(ViewSchedule.this);
+
+                builder.setTitle( item.schedule + "의 상세 일정");
+                builder.setMessage(item.schedule + "의 상세 일정을 확인 및 작성하시겠습니까?");
+                builder.setPositiveButton("확인 / 작성", new DialogInterface.OnClickListener(){
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        Intent intent2 = new Intent(ViewSchedule.this, ViewSchedule2.class);
+                        intent2.putExtra("schedule",item.schedule);
+                        intent2.putExtra("schedule2",item.schedule2);
+                        intent2.putExtra("position",position);
+                        intent2.putExtra("position2", position2);
+                        intent2.putExtra("key", item.scheduleKey);
+                        startActivityForResult(intent2, 1);
+
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener(){
+                    @Override
+                    public void onClick(DialogInterface dialog, int id)
+                    {
+                        dialog.cancel();
+                    }
+                });
+                AlertDialog alertDialog = builder.create();
+
+                alertDialog.show();
+
             }
         });
     }

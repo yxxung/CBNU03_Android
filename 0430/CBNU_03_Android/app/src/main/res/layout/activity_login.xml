@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity"
+    android:orientation="vertical"
+    >
+
+
+    <TextView
+        android:id="@+id/login_title"
+        android:background="#CC99FF"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:minHeight="?actionBarSize"
+        android:padding="16dp"
+        android:text="로그인"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_marginBottom="10sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp">
+
+
+        <EditText
+            android:id="@+id/idInputText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="아이디"
+            android:textSize="30dp" />
+
+
+        <EditText
+            android:id="@+id/pwInputText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/idInputText"
+            android:hint="비밀번호"
+            android:textSize="30dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="0dp"
+            android:layout_below="@id/pwInputText"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/loginButton"
+                android:layout_width="180sp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pwInputText"
+                android:layout_marginLeft="15sp"
+                android:layout_marginTop="10dp"
+                android:text="로그인"
+                android:textColor="#fde387"
+                android:textSize="25sp" />
+
+            <Button
+                android:id="@+id/signUpButton"
+                android:layout_width="180sp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10sp"
+                android:layout_marginTop="10dp"
+                android:text="회원가입"
+                android:textColor="#fde387"
+                android:textSize="25sp" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>
