@@ -95,14 +95,16 @@ public class ViewSchedule2 extends Activity {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     adapter2.clearList();
                     for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                        if (snapshot.getValue() != null) {
-                            int i = 0;
-                            //snapshot의 정보, schedule 객체로 변환
-                            ScheduleItem2 scheduleItem2 = postSnapshot.getValue(ScheduleItem2.class);
-                            adapter2.addItem(scheduleItem2);
-                            i++;
-                        } else {
-                            Log.w("FireBaseData", "loadPost:onCancelled");
+                        if (postSnapshot != null) {
+                            if (snapshot.getValue() != null) {
+                                int i = 0;
+                                //snapshot의 정보, schedule 객체로 변환
+                                ScheduleItem2 scheduleItem2 = postSnapshot.getValue(ScheduleItem2.class);
+                                adapter2.addItem(scheduleItem2);
+                                i++;
+                            } else {
+                                Log.w("FireBaseData", "loadPost:onCancelled");
+                            }
                         }
                     }
                     adapter2.notifyDataSetChanged();

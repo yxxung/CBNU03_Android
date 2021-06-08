@@ -105,6 +105,37 @@ public class ViewSchedule extends Activity {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             try {
                 longDateTime = dateFormat.parse(date).getTime();
+                //DB 탐색
+                db.child(id).orderByChild("longDate").equalTo(longDateTime).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        adapter.clearList();
+                        for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                            if (postSnapshot != null) {
+                                if (snapshot.getValue() != null) {
+                                    int i = 0;
+                                    //snapshot의 정보, schedule 객체로 변환
+                                    ScheduleItem scheduleItem = postSnapshot.getValue(ScheduleItem.class);
+                                    adapter.addItem(scheduleItem);
+                                    i++;
+                                } else {
+                                    Log.w("FireBaseData", "loadPost:onCancelled");
+                                }
+                            }
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
+                    }
+                });
+
+                /**
+                 * DB 활동 종료.
+                 */
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -112,35 +143,7 @@ public class ViewSchedule extends Activity {
             db = FirebaseDatabase.getInstance().getReference();
 
 
-            //DB 탐색
-            db.child(id).orderByChild("longDate").equalTo(longDateTime).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    adapter.clearList();
-                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                        if (snapshot.getValue() != null) {
-                            int i = 0;
-                            //snapshot의 정보, schedule 객체로 변환
-                            ScheduleItem scheduleItem = postSnapshot.getValue(ScheduleItem.class);
-                            adapter.addItem(scheduleItem);
-                            i++;
-                        } else {
-                            Log.w("FireBaseData", "loadPost:onCancelled");
-                        }
-                    }
-                    adapter.notifyDataSetChanged();
 
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.w("FireBaseData", "loadPost:onCancelled", error.toException());
-                }
-            });
-
-        /**
-         * DB 활동 종료.
-         */
 
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener(){
@@ -166,7 +169,9 @@ public class ViewSchedule extends Activity {
                     @Override
                     public void onClick(DialogInterface dialog, int id)
                     {
-                        db.child(ViewSchedule.this.id).child(adapter.items.get(i).getScheduleKey()).removeValue();
+                        Intent intent = getIntent();
+                        String targetId = intent.getStringExtra("userName").toString();
+                        db.child(targetId).child(adapter.items.get(i).getScheduleKey()).removeValue();
                         adapter.items.remove(i);
                         adapter.notifyDataSetChanged();
 
